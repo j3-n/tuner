@@ -5,12 +5,31 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/models"
+	"golang.org/x/oauth2"
 )
 
+type User struct {
+	uuid  string
+	token *oauth2.Token
+}
+
+type Users struct {
+	users []*User
+	mu    *sync.Mutex
+}
+
 var gameLobbies []models.Lobby
+var users Users
+
+func (u *Users) Add(n *User) {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	u.users = append(u.users, n)
+}
 
 // Creates lobby and returns lobby id using bogo lobby algorithm
 func CreateLobby(hostPlayer int) int {

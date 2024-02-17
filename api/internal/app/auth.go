@@ -28,5 +28,7 @@ func Auth(c *fiber.Ctx) error {
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	c.Cookie(cookie)
 
+	// Register the player
+
 	return nil
 }
