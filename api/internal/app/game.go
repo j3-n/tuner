@@ -36,7 +36,7 @@ func CreateLobby() int {
 }
 
 // Adds player to lobby with provided player id and lobby id
-func AddPlayerToLobby(player models.Player, lobbyID string) error {
+func AddPlayerToLobby(player *models.Player, lobbyID string) error {
 	for lobbyIndex, lobby := range gameLobbies {
 		if lobby.LobbyId == lobbyID {
 			flag := false
@@ -48,39 +48,43 @@ func AddPlayerToLobby(player models.Player, lobbyID string) error {
 			}
 			if !flag {
 				gameLobbies[lobbyIndex].PlayerList = append(gameLobbies[lobbyIndex].PlayerList, player)
+				return nil
 			} else {
 				return errors.New("Cannot add duplicate player " + player.DisplayName)
 			}
 		}
 	}
-	return nil
+	return errors.New("Lobby not found")
 }
 
 // Handle websocket request for lobby creation
 func HandleCreationRequest(c *websocket.Conn) {
+	defer c.Close()
 	// Create lobby
 	id := CreateLobby()
-	if JoinLobby(c, fmt.Sprintf("%d", id)) == nil {
-		c.WriteMessage(websocket.TextMessage, []byte("yippee lobby"))
-	}
+	JoinLobby(c, fmt.Sprintf("%d", id))
 }
 
 func HandleAddPlayerRequest(c *websocket.Conn) {
+	defer c.Close()
 	id := c.Params("lobby")
-	if JoinLobby(c, id) == nil {
-		c.WriteMessage(websocket.TextMessage, []byte("yippee"))
-	}
+	JoinLobby(c, id)
 }
 
-func JoinLobby(c *websocket.Conn, lobby string) error {
+func JoinLobby(c *websocket.Conn, lobby string) {
 	// Check player authentication
 	p := CreatePlayer(c.Cookies("TUNER_SESSION"))
 	if p == nil {
-		return errors.New("User not authenticated!")
+		c.WriteMessage(websocket.TextMessage, []byte("Not authenticated!"))
+		return
 	}
 	// Join lobby
-	fmt.Printf("%s has connected via websocket to lobby %s\n", p.DisplayName, lobby)
-	return nil
+	err := AddPlayerToLobby(p, lobby)
+	if err != nil {
+		c.WriteMessage(websocket.TextMessage, []byte("Invalid lobby!"))
+		return
+	}
+	fmt.Printf("%s is joining lobby %s\n", p.DisplayName, lobby)
 }
 
 func CreatePlayer(uuid string) *models.Player {

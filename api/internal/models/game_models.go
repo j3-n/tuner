@@ -9,7 +9,7 @@ import (
 
 type Lobby struct {
 	LobbyId    string `json:"lobbyId"`
-	PlayerList []Player
+	PlayerList []*Player
 }
 
 type User struct {
