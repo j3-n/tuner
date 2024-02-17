@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { H3Component } from "./heading";
 import { Player } from "../types/Player";
+import { ImageComponent } from "./image";
 
 type Props = {
   player: Player;
@@ -14,6 +15,7 @@ export const PlayerComponent: React.FC<Props> = ({
   return (
     <div>
       <H3Component>{player.displayName}</H3Component>
+      {player.iconURL && <ImageComponent src={player.iconURL}></ImageComponent>}
       {children}
     </div>
   );
