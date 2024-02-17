@@ -47,11 +47,13 @@ func AddPlayerToLobby(player *models.Player, lobbyID string) error {
 // Handle websocket request for lobby creation
 func HandleCreationRequest(c *websocket.Conn) {
 	// Create lobby
+	defer c.Close()
 	id := CreateLobby()
 	JoinLobby(c, fmt.Sprintf("%d", id))
 }
 
 func HandleAddPlayerRequest(c *websocket.Conn) {
+	defer c.Close()
 	id := c.Params("lobby")
 	JoinLobby(c, id)
 }

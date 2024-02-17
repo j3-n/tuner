@@ -9,7 +9,6 @@ import (
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
-	defer c.Close()
 	for {
 		_, m, err := c.ReadMessage()
 		if err != nil {
