@@ -91,12 +91,53 @@ func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
 	if err != nil {
 		return nil
 	}
+
 	return &models.Player{
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
 		IconURL:     u.Images[0].URL,
+		Carousel:    GenerateCarousel(client),
 		Conn:        c,
+	}
+
+}
+
+func GenerateCarousel(c *spotify.Client) []string {
+	// Fetch user's top albums to use in carousel
+	songs, err := c.CurrentUsersTopTracks(context.Background())
+	if err != nil {
+		return nil
+	}
+	exists := map[string]bool{}
+	carousel := []string{}
+	for _, s := range songs.Tracks {
+		if !exists[s.Album.ID.String()] {
+			exists[s.Album.ID.String()] = true
+			carousel = append(carousel, s.Album.Images[0].URL)
+		}
+	}
+	return carousel
+}
+
+// Listener for each player
+func MonitorPlayer(c *websocket.Conn, p models.Player, lobby string) {
+	type Shit struct {
+		Optype string // Contains type of operation - GAME START, GUESS ANSWER ETC
+		Data   string // Contains data relating to option above
+	}
+	var fuck Shit
+	c.ReadJSON(fuck)
+
+	if fuck.Optype == "START" {
+		// START GAME AT PLAYERS LOBBY
+		//lobbies.Get(lobby).STARTGAME()
+		// So set state to start game
+		// broadcast to all other
+	} else if fuck.Optype == "GUESS" {
+		// Data will contain id of answer
+		// Send this data to nathans function which will evaluate it when round is over
+		// nathans function should wait till all people in lobby have given an answer
 	}
 
 }
