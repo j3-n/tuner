@@ -25,18 +25,23 @@ function Page() {
       console.log(message);
       setLobby(JSON.parse(message));
     },
+    onClose: () => {
+      console.log("disconnected")
+    }
   });
 
   return (
-    <div className="text-center items-center">
-      <H1Component>lobby {lobbyId}</H1Component>
+    <div className="max-h-screen">
+      <div className="text-center items-center">
+        <H1Component>lobby {lobbyId}</H1Component>
 
-      <div className="pt-20 items-center w-1/2 grid grid-flow-col">
-      {lobby && lobby.players.map((player: Player, index: number) =>
-        <div key={index}>
-          <PlayerComponent player={player}></PlayerComponent>
+        <div className="pt-20 items-center w-1/2 grid grid-flow-col">
+          {lobby && lobby.players.map((player: Player, index: number) =>
+            <div key={index}>
+              <PlayerComponent player={player}></PlayerComponent>
+            </div>
+          )}
         </div>
-      )}
       </div>
     </div>
   );

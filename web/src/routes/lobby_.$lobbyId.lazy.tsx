@@ -33,14 +33,18 @@ function Page() {
   });
 
   return (
-    <div className="text-center items-center">
-      <H1Component>lobby {lobbyId}</H1Component>
+    <div className="max-h-screen">
+      <div className="text-center items-center pt-20">
+        <H1Component>lobby {lobbyId}</H1Component>
 
-      {lobby && lobby.players.map((player: Player, index: number) =>
-        <div key={index}>
-          <PlayerComponent player={player}></PlayerComponent>
+        <div className="pt-20 items-center w-1/2 grid grid-flow-col">
+          {lobby && lobby.players.map((player: Player, index: number) =>
+            <div key={index}>
+              <PlayerComponent player={player}></PlayerComponent>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
