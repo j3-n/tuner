@@ -18,10 +18,12 @@ const (
 )
 
 type Lobby struct {
-	mu         sync.Mutex `json:"-"`
-	Host       string     `json:"-"`
-	LobbyId    string     `json:"lobbyId"`
-	PlayerList []*Player  `json:"players"`
+	mu         sync.Mutex     `json:"-"`
+	Host       string         `json:"-"`
+	LobbyId    string         `json:"lobbyId"`
+	PlayerList []*Player      `json:"players"`
+	State      GameState      `json:"-"`
+	Guesses    map[string]int `json:"-"` // Index
 }
 
 type User struct {
