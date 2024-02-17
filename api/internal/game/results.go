@@ -8,4 +8,13 @@ func Results(l *models.Lobby) {
 	// Send scores to frontend
 	// Wait
 	// Points -> Guessing
+	for _, player := range l.PlayerList {
+		index, ok := l.Guesses[player.UUID]
+		if ok {
+			if l.CurrentQuestion.Correct == index {
+				// Give that bozo points
+			}
+		}
+
+	}
 }
