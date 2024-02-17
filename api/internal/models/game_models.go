@@ -44,6 +44,7 @@ type Player struct {
 	Client      *spotify.Client `json:"-"`
 	DisplayName string          `json:"displayName"`
 	IconURL     string          `json:"iconURL"`
+	Carousel    []string        `json:"carousel"`
 	Conn        *websocket.Conn `json:"-"`
 }
 
