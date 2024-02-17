@@ -18,8 +18,9 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 			break
 		}
 		// Handle message
-		if string(m) == "hello" {
-			c.WriteMessage(websocket.TextMessage, []byte("fuck off"))
+		if string(m) == "quiz" {
+			data, _ := json.Marshal(l.GenerateQuiz(10))
+			c.WriteMessage(websocket.TextMessage, data)
 		}
 	}
 

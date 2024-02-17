@@ -77,7 +77,7 @@ func (l *Lobby) GenerateQuizSongs(length int) ([]*spotify.FullTrack, []*spotify.
 		}
 	}
 	// Shuffle the songs
-	length = max(length, len(allSongs))
+	length = min(length, len(allSongs))
 	rand.Shuffle(len(allSongs), func(i int, j int) {
 		temp := allSongs[i]
 		allSongs[i] = allSongs[j]

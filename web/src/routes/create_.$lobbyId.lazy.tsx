@@ -20,7 +20,7 @@ function Page() {
 
   const [lobby, setLobby] = useState<Lobby>();
 
-  const { sendJsonMessage } = useWebSocket(socketUrl, {
+  const { sendMessage, sendJsonMessage } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected")
     },
@@ -39,7 +39,8 @@ function Page() {
       command: "play",
       body: "",
     };
-    sendJsonMessage(message)
+    sendMessage("quiz");
+    sendJsonMessage(message);
   };
 
   return (
