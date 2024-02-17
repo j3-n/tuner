@@ -43,6 +43,7 @@ type Player struct {
 	*User       `json:"-"`
 	Client      *spotify.Client `json:"-"`
 	DisplayName string          `json:"displayName"`
+	IconURL     string          `json:"iconURL"`
 	Conn        *websocket.Conn `json:"-"`
 }
 
