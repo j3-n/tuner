@@ -102,6 +102,15 @@ func CreatePlayer(uuid string) *models.Player {
 
 }
 
+// Add/Update question in lobby when new game is started and when new round is started
+func AddQuestionToLobby(question models.Questions, lobby models.Lobby) {
+	for _, lob := range gameLobbies {
+		if lob.LobbyId == lobby.LobbyId {
+			lobby.CurrentQuestion = question
+		}
+	}
+}
+
 func HandlePlayerGuess(c *websocket.Conn) {
 
 	type shit struct {
@@ -112,6 +121,7 @@ func HandlePlayerGuess(c *websocket.Conn) {
 
 	c.ReadJSON(&thing)
 
+	fmt.Println(thing)
 	// Update score
 
 	// Send back correct or nah

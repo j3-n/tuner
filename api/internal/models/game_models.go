@@ -8,8 +8,9 @@ import (
 )
 
 type Lobby struct {
-	LobbyId    string `json:"lobbyId"`
-	PlayerList []Player
+	LobbyId         string `json:"lobbyId"`
+	PlayerList      []Player
+	CurrentQuestion Questions
 }
 
 type User struct {
@@ -26,6 +27,7 @@ type Player struct {
 	*User
 	Client      *spotify.Client
 	DisplayName string
+	Score       int
 }
 
 func (u *Users) Add(n *User) {
