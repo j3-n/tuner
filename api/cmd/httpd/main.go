@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/j3-n/tuner/api/internal/app"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	fmt.Println("hello")
-	app.Run()
+	godotenv.Load()
+	a := app.New()
+	a.Run()
+	a.Shutdown()
 }
