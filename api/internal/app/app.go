@@ -101,6 +101,16 @@ func (a *App) Run() {
 
 	a.Fiber.Get("/auth", Auth)
 
+	a.Fiber.Use("/answer/response", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+
+	a.Fiber.Get("/answer/response", websocket.New(HandlePlayerGuess))
+
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
 

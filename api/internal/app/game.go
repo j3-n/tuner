@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"strconv"
 	"sync"
-	"strings"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/models"
@@ -91,14 +90,20 @@ func HandleCreationRequest(c *websocket.Conn) {
 
 // Reads player id and lobby id and assigns player to lobby if both player id and lobby exist
 func HandleAddPlayerRequest(c *websocket.Conn) {
-	mt, msgb, err := c.ReadMessage() // Read playerId:lobbyId
-	if err != nil {
-		fmt.Printf("Error reading lobby assignment input")
+
+}
+
+func HandlePlayerGuess(c *websocket.Conn) {
+
+	type shit struct {
+		Uuid     string `json:"uuid"`
+		AnswerId int    `json:"answerId"`
 	}
-	msg := string(msgb[:])
-	msgSplit := strings.Split(msg, ":")
-	fmt.Println("Received: " + msgSplit[0]+", "+msgSplit[])
+	var thing shit
 
-	c.WriteMessage(mt, []byte("Test1"))
+	c.ReadJSON(&thing)
 
+	// Update score
+
+	// Send back correct or nah
 }
