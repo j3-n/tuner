@@ -95,6 +95,7 @@ func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
+		IconURL:     u.Images[0].URL,
 		Conn:        c,
 	}
 
