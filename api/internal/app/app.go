@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/j3-n/tuner/api/internal/endpoints"
@@ -51,6 +52,17 @@ func (a *App) Run() {
 			return os.Getenv("ENVIRONMENT") == "development"
 		},
 	}))
+
+	a.Fiber.Use("/ws", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+
+	go endpoints.SocketListener()
+	a.Fiber.Get("/ws/:id", websocket.New(endpoints.GetSocket))
 
 	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
 
