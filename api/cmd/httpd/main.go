@@ -8,5 +8,7 @@ import (
 
 func main() {
 	fmt.Println("hello")
-	app.Run()
+	a := app.New()
+	a.Run()
+	a.Shutdown()
 }
