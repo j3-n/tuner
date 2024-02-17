@@ -23,11 +23,6 @@ type GuessData struct {
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
 
-	Timer := time.NewTimer(time.Second * 15)
-	// Stop the timer at the end of the function.
-	// Defers are called when the parent function exits.
-	defer Timer.Stop()
-
 	for {
 		var data ClientData
 		err := c.ReadJSON(&data)
@@ -58,7 +53,6 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 			// Send this data to nathans function which will evaluate it when round is over
 			// nathans function should wait till all people in lobby have given an answer
 			now := time.Now().Add(15 * time.Second)
-			<-Timer.C
 			game.WaitingGuesses(l, now)
 		}
 	}
