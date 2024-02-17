@@ -77,7 +77,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	l, _ := json.Marshal(lobbies.Get(lobby))
 	c.WriteMessage(websocket.TextMessage, []byte(l))
 	// Send to running worker
-	PlayerWorker(c, p, lobbies.Get(lobby))
+	go PlayerWorker(c, p, lobbies.Get(lobby))
 }
 
 func CreatePlayer(uuid string) *models.Player {

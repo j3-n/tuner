@@ -1,10 +1,21 @@
 package game
 
-import "github.com/j3-n/tuner/api/internal/models"
+import (
+	"time"
 
-func WaitingGuesses(l *models.Lobby) {
-	// Waiting until packet of (optype) is sent
-	for l.State == models.Guessing {
-		
+	"github.com/j3-n/tuner/api/internal/models"
+)
+
+func WaitingGuesses(l *models.Lobby, times time.Time) {
+	ticker := time.NewTicker(time.Second)
+	// Loop indefinitely
+	for {
+		select {
+		case <-ticker.C:
+			now := time.Now()
+			differnce := now.Sub(times)
+			err := []byte(differnce.Abs().String())
+			l.BroadcastToAllPlayers(err)
+		}
 	}
 }
