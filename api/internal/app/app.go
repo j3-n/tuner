@@ -2,8 +2,11 @@ package app
 
 import (
 	"log"
+	"os"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/redirect"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 )
@@ -25,7 +28,6 @@ type App struct {
 
 func New(args ...Config) App {
 	auth = spotifyauth.New(spotifyauth.WithRedirectURL("http://localhost:4444/auth"), spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate, spotifyauth.ScopeUserTopRead))
-
 	c := Config{
 		Port: ":4444",
 		Log:  false,
@@ -45,9 +47,15 @@ func New(args ...Config) App {
 
 func (a *App) Run() {
 
-	a.Fiber.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	a.Fiber.Use(cors.New(cors.Config{
+		AllowOriginsFunc: func(origin string) bool {
+			return os.Getenv("ENVIRONMENT") == "development"
+		},
+	}))
+
+	a.Fiber.Get("/create", websocket.New(HandleCreationRequest))
+
+	a.Fiber.Get("/play/:lobby", websocket.New(HandleAddPlayerRequest))
 
 	a.Fiber.Use(redirect.New(redirect.Config{
 		Rules: map[string]string{
