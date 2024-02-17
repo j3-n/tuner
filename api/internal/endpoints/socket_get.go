@@ -66,7 +66,6 @@ func SocketListener() {
 			}
 
 			for connection := range Players {
-				log.Println(connection.Params)
 				err := connection.WriteMessage(websocket.TextMessage, jsonData)
 				if err != nil {
 					log.Println("write error:", err)
