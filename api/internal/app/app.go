@@ -53,6 +53,17 @@ func (a *App) Run() {
 		},
 	}))
 
+	a.Fiber.Use("/ws", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+
+	go endpoints.SocketListener()
+	a.Fiber.Get("/ws/:id", websocket.New(endpoints.GetSocket))
+
 	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
 
 	a.Fiber.Use("/create_lobby", func(c *fiber.Ctx) error {
