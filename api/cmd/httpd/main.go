@@ -6,7 +6,11 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
 	a := app.New()
 	a.Run()
 	a.Shutdown()
