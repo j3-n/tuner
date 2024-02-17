@@ -26,8 +26,9 @@ func CreateLobby() int {
 		randomLobbyID = int(rand.Float64() * 1000)
 		isUnique = !lobbies.Exists(fmt.Sprintf("%d", randomLobbyID))
 	}
-
-	lobbies.Add(&models.Lobby{LobbyId: fmt.Sprintf("%d", randomLobbyID)})
+	lob := models.Lobby{LobbyId: fmt.Sprintf("%d", randomLobbyID), State: models.Waiting, Round: 0}
+	lob.CurrentQuestion = lob.GenerateQuiz(4)
+	lobbies.Add(&lob)
 	return randomLobbyID
 }
 
@@ -78,7 +79,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	l, _ := json.Marshal(lo)
 	lo.BroadcastToAllPlayers(l)
 	// Send to running worker
-	PlayerWorker(c, p, lo)
+	go PlayerWorker(c, p, lo)
 }
 
 func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
@@ -118,26 +119,4 @@ func GenerateCarousel(c *spotify.Client) []string {
 		}
 	}
 	return carousel
-}
-
-// Listener for each player
-func MonitorPlayer(c *websocket.Conn, p models.Player, lobby string) {
-	type Shit struct {
-		Optype string // Contains type of operation - GAME START, GUESS ANSWER ETC
-		Data   string // Contains data relating to option above
-	}
-	var fuck Shit
-	c.ReadJSON(fuck)
-
-	if fuck.Optype == "START" {
-		// START GAME AT PLAYERS LOBBY
-		//lobbies.Get(lobby).STARTGAME()
-		// So set state to start game
-		// broadcast to all other
-	} else if fuck.Optype == "GUESS" {
-		// Data will contain id of answer
-		// Send this data to nathans function which will evaluate it when round is over
-		// nathans function should wait till all people in lobby have given an answer
-	}
-
 }
