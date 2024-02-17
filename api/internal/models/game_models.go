@@ -8,6 +8,7 @@ import (
 )
 
 type Lobby struct {
+	Host       string    `json:"-"`
 	LobbyId    string    `json:"lobbyId"`
 	PlayerList []*Player `json:"players"`
 }
