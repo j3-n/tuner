@@ -1,7 +1,8 @@
 package models
 
 type Answer struct {
-	Answer   string `json:"answer"`
+	Artist   string `json:"artist"`
+	Song     string `json:"song"`
 	AnswerID int    `json:"id"`
 }
 
@@ -14,10 +15,10 @@ var QuestionsSet = []Questions{
 	{
 		Question: "Who is this artist",
 		Answers: []Answer{
-			{Answer: "Taylor Swift", AnswerID: 1},
-			{Answer: "Ye", AnswerID: 2},
-			{Answer: "JayZ", AnswerID: 3},
-			{Answer: "SZA", AnswerID: 4},
+			{Artist: "Taylor Swift", Song: "hi", AnswerID: 1},
+			{Artist: "Ye", Song: "good monring", AnswerID: 2},
+			{Artist: "JayZ", Song: "heie", AnswerID: 3},
+			{Artist: "SZA", Song: "Ddsds", AnswerID: 4},
 		},
 	},
 }

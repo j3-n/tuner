@@ -62,9 +62,10 @@ func (a *App) Run() {
 	})
 
 	go endpoints.SocketListener()
-	a.Fiber.Get("/ws/:id", websocket.New(endpoints.GetSocket))
 
-	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
+	a.Fiber.Get("/ws/:id", websocket.New(endpoints.GetSocket))
+	a.Fiber.Get("/api/v1/questions", endpoints.GetQuestions)
+	a.Fiber.Post("/api/v1/user_answer", endpoints.PostUserAnswer)
 
 	a.Fiber.Use("/create_lobby", func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {
