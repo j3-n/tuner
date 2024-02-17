@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/models"
@@ -69,5 +70,16 @@ func HandleCreationRequest(c *websocket.Conn) {
 	CreateLobby(receivedPlayerId)
 }
 
+// Reads player id and lobby id and assigns player to lobby if both player id and lobby exist
 func HandleAddPlayerRequest(c *websocket.Conn) {
+	mt, msgb, err := c.ReadMessage() // Read playerId:lobbyId
+	if err != nil {
+		fmt.Printf("Error reading lobby assignment input")
+	}
+	msg := string(msgb[:])
+	msgSplit := strings.Split(msg, ":")
+	fmt.Println("Received: " + msgSplit[0]+", "+msgSplit[])
+
+	c.WriteMessage(mt, []byte("Test1"))
+
 }
