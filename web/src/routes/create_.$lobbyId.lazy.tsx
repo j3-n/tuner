@@ -8,8 +8,6 @@ import { Player } from '../types/Player';
 import { ButtonComponent } from '../components/button';
 import { Command } from '../types/Command';
 
-
-
 export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
 });

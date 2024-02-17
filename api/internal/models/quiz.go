@@ -46,19 +46,19 @@ func (l *Lobby) GenerateQuiz(length int) []Question {
 		}
 		ret = append(ret, question)
 
+		rand.Shuffle(len(answers), func(i int, j int) {
+			temp := answers[i]
+			answers[i] = answers[j]
+			answers[j] = temp
+		})
 	}
-	rand.Shuffle(len(answers), func(i int, j int) {
-		temp := answers[i]
-		answers[i] = answers[j]
-		answers[j] = temp
-	})
 	return ret
 }
 
-func (l *Lobby) GenerateQuizSongs(length int) ([]*spotify.FullTrack, []*spotify.FullTrack) {
+func (l *Lobby) GenerateQuizSongs(length int) ([]spotify.FullTrack, []spotify.FullTrack) {
 	// in honour of Stephen Piddock
 	songsExist := map[string]bool{}
-	allSongs := []*spotify.FullTrack{}
+	allSongs := []spotify.FullTrack{}
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
@@ -72,10 +72,11 @@ func (l *Lobby) GenerateQuizSongs(length int) ([]*spotify.FullTrack, []*spotify.
 		for _, s := range songs.Tracks {
 			if !songsExist[s.ID.String()] {
 				songsExist[s.ID.String()] = true
-				allSongs = append(allSongs, &s)
+				allSongs = append(allSongs, s)
 			}
 		}
 	}
+
 	// Shuffle the songs
 	length = min(length, len(allSongs))
 	rand.Shuffle(len(allSongs), func(i int, j int) {
