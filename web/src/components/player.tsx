@@ -15,7 +15,13 @@ export const PlayerComponent: React.FC<Props> = ({
   return (
     <div>
       <H3Component>{player.displayName}</H3Component>
-      {player.iconURL && <ImageComponent src={player.iconURL}></ImageComponent>}
+      {player.iconURL &&
+        <ImageComponent
+          src={player.iconURL}
+          width={100}
+          height={100}
+          rounded={true}
+        />}
       {children}
     </div>
   );
