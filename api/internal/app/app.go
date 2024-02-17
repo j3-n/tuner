@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/j3-n/tuner/api/internal/endpoints"
-	"github.com/j3-n/tuner/api/internal/quiz"
+	"github.com/j3-n/tuner/api/internal/models"
 )
 
 type Config struct {
@@ -42,7 +42,7 @@ func New(args ...Config) App {
 func (a *App) Run() {
 
 	a.Fiber.Get("/api/v1/questions", func(c *fiber.Ctx) error {
-		eer := quiz.QuestionsSet[1]
+		eer := models.QuestionsSet[1]
 
 		return c.JSON(eer)
 	})

@@ -7,19 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gofiber/contrib/websocket"
+	"github.com/j3-n/tuner/api/internal/models"
 )
 
-type Lobby struct {
-	lobbyId    int `json:"lobbyId"`
-	playerList []Player
-}
-
-type Player struct {
-	playerId int    `json:"playerId"`
-	name     string `json:"playerName"`
-}
-
-var gameLobbies []Lobby
+var gameLobbies []models.Lobby
 
 // Creates lobby and returns lobby id
 func CreateLobby(hostPlayer int) int {
@@ -32,32 +23,32 @@ func CreateLobby(hostPlayer int) int {
 		isUnique = true
 		randomLobbyID = int(rand.Float64() * 1000)
 		for _, lobby := range gameLobbies {
-			if lobby.lobbyId == randomLobbyID {
+			if lobby.LobbyId == randomLobbyID {
 				isUnique = false
 			}
 		}
 	}
 
-	gameLobbies = append(gameLobbies, Lobby{lobbyId: randomLobbyID})
-	AddPlayerToLobby(Player{playerId: hostPlayer, name: "John"}, randomLobbyID)
+	gameLobbies = append(gameLobbies, models.Lobby{LobbyId: randomLobbyID})
+	AddPlayerToLobby(models.Player{PlayerId: hostPlayer, Name: "John"}, randomLobbyID)
 	return randomLobbyID
 }
 
 // Adds player to lobby with provided player id and lobby id
-func AddPlayerToLobby(player Player, lobbyID int) error {
+func AddPlayerToLobby(player models.Player, lobbyID int) error {
 	for lobbyIndex, lobby := range gameLobbies {
-		if lobby.lobbyId == lobbyID {
+		if lobby.LobbyId == lobbyID {
 			flag := false
 			// Check that player with given id doesnt exist in lobby
-			for _, playerId := range lobby.playerList {
-				if playerId.playerId == player.playerId {
+			for _, playerId := range lobby.PlayerList {
+				if playerId.PlayerId == player.PlayerId {
 					flag = true
 				}
 			}
 			if !flag {
-				gameLobbies[lobbyIndex].playerList = append(gameLobbies[lobbyIndex].playerList, player)
+				gameLobbies[lobbyIndex].PlayerList = append(gameLobbies[lobbyIndex].PlayerList, player)
 			} else {
-				return errors.New("Cannot add duplicate player " + player.name)
+				return errors.New("Cannot add duplicate player " + player.Name)
 			}
 		}
 	}
