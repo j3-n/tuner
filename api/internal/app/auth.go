@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -11,12 +12,14 @@ import (
 )
 
 func Auth(c *fiber.Ctx) error {
+	ctx := context.Background()
+
 	r, err := adaptor.ConvertRequest(c, false)
 	if err != nil {
 		return err
 	}
 
-	token, err := auth.Token(c.Context(), state, r)
+	token, err := auth.Token(ctx, state, r)
 	if err != nil {
 		return err
 	}
