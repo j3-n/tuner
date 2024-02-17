@@ -38,5 +38,7 @@ func Auth(c *fiber.Ctx) error {
 
 	fmt.Printf("%s registered\n", s.String())
 
+	c.Redirect("http://localhost:5173")
+
 	return nil
 }
