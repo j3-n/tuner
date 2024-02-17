@@ -91,14 +91,33 @@ func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
 	if err != nil {
 		return nil
 	}
+
 	return &models.Player{
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
 		IconURL:     u.Images[0].URL,
+		Carousel:    GenerateCarousel(client),
 		Conn:        c,
 	}
 
+}
+
+func GenerateCarousel(c *spotify.Client) []string {
+	// Fetch user's top albums to use in carousel
+	songs, err := c.CurrentUsersTopTracks(context.Background())
+	if err != nil {
+		return nil
+	}
+	exists := map[string]bool{}
+	carousel := []string{}
+	for _, s := range songs.Tracks {
+		if !exists[s.Album.ID.String()] {
+			exists[s.Album.ID.String()] = true
+			carousel = append(carousel, s.Album.Images[0].URL)
+		}
+	}
+	return carousel
 }
 
 // Listener for each player
