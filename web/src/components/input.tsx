@@ -9,7 +9,7 @@ export const InputComponent: React.FC<Props> = ({
   placeholder,
   id,
   onChange
-}) => {
+}): JSX.Element => {
   return (
     <div>
       <input

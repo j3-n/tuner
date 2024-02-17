@@ -1,4 +1,4 @@
-export const HeaderComponent = () => {
+export const HeaderComponent = (): JSX.Element => {
   return (
     <></>
   );

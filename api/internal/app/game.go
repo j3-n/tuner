@@ -52,6 +52,7 @@ func HandleCreationRequest(c *websocket.Conn) {
 	JoinLobby(c, fmt.Sprintf("%d", id))
 }
 
+// Reads player id and lobby id and assigns player to lobby if both player id and lobby exist
 func HandleAddPlayerRequest(c *websocket.Conn) {
 	defer c.Close()
 	id := c.Params("lobby")
@@ -94,4 +95,27 @@ func CreatePlayer(uuid string) *models.Player {
 		Client:      client,
 		DisplayName: u.DisplayName,
 	}
+
+}
+
+// Listener for each player
+func MonitorPlayer(c *websocket.Conn, p models.Player, lobby string) {
+	type Shit struct {
+		Optype string // Contains type of operation - GAME START, GUESS ANSWER ETC
+		Data   string // Contains data relating to option above
+	}
+	var fuck Shit
+	c.ReadJSON(fuck)
+
+	if fuck.Optype == "START" {
+		// START GAME AT PLAYERS LOBBY
+		//lobbies.Get(lobby).STARTGAME()
+		// So set state to start game
+		// broadcast to all other
+	} else if fuck.Optype == "GUESS" {
+		// Data will contain id of answer
+		// Send this data to nathans function which will evaluate it when round is over
+		// nathans function should wait till all people in lobby have given an answer
+	}
+
 }
