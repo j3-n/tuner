@@ -37,12 +37,10 @@ func AddPlayerToLobby(player *models.Player, lobbyID string) error {
 	if lobby == nil {
 		return errors.New("invalid lobby")
 	}
-	for _, playerId := range lobby.PlayerList {
-		if playerId.UUID == player.UUID {
-			return errors.New("player is already in this lobby")
-		}
+	if lobby.HasPlayer(player) {
+		return errors.New("player already in lobby")
 	}
-	lobby.PlayerList = append(lobby.PlayerList, player)
+	lobby.AddPlayer(player)
 	return nil
 }
 
