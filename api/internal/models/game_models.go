@@ -24,7 +24,8 @@ type Lobby struct {
 	PlayerList      []*Player      `json:"players"`
 	State           GameState      `json:"-"`
 	Guesses         map[string]int `json:"-"` // Index
-	CurrentQuestion Question       `json:"-"`
+	CurrentQuestion []Question     `json:"-"`
+	Round           int            `json:"-"`
 }
 
 type User struct {
