@@ -1,8 +1,6 @@
 package app
 
 import (
-	"fmt"
-
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/models"
 )
@@ -10,15 +8,22 @@ import (
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
 	for {
-		_, m, err := c.ReadMessage()
-		if err != nil {
-			// Player disconnect
-			fmt.Printf("%s has disconnected from lobby %s\n", p.DisplayName, l.LobbyId)
-			break
+		type Shit struct {
+			Optype string // Contains type of operation - GAME START, GUESS ANSWER ETC
+			Data   string // Contains data relating to option above
 		}
-		// Handle message
-		if string(m) == "hello" {
-			c.WriteMessage(websocket.TextMessage, []byte("fuck off"))
+		var fuck Shit
+		c.ReadJSON(fuck)
+
+		if fuck.Optype == "START" {
+			// START GAME AT PLAYERS LOBBY
+			//lobbies.Get(lobby).STARTGAME()
+			// So set state to start game
+			// broadcast to all other
+		} else if fuck.Optype == "GUESS" {
+			// Data will contain id of answer
+			// Send this data to nathans function which will evaluate it when round is over
+			// nathans function should wait till all people in lobby have given an answer
 		}
 	}
 
