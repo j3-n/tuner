@@ -1,16 +1,18 @@
 package endpoints
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/gofiber/contrib/websocket"
+	"github.com/j3-n/tuner/api/internal/models"
 )
 
 var (
 	Players    = make(map[*websocket.Conn]struct{})
 	Register   = make(chan *websocket.Conn)
 	Unregister = make(chan *websocket.Conn)
-	Broadcast  = make(chan string)
+	Broadcast  = make(chan models.Questions)
 )
 
 func GetSocket(c *websocket.Conn) {
@@ -20,22 +22,26 @@ func GetSocket(c *websocket.Conn) {
 		c.Close()
 	}()
 
+	i := 0
 	Register <- c
 
 	for {
+
 		messageType, message, err := c.ReadMessage()
 		if err != nil {
 			log.Println("read error:", err)
 			return
 		}
-
-		// Maybe do something
-
-		if messageType == websocket.TextMessage {
-			Broadcast <- string(message)
-		} else {
-			log.Println("message received of type: ", messageType)
+		if string(message) == "get" {
+			if messageType == websocket.TextMessage {
+				questions := models.QuestionsSet[i]
+				i = i + 1
+				Broadcast <- questions
+			} else {
+				log.Println("message received of type: ", messageType)
+			}
 		}
+
 	}
 
 }
@@ -47,21 +53,23 @@ func SocketListener() {
 
 		case connection := <-Register:
 			Players[connection] = struct{}{}
-			log.Println("connection is registerd")
+			log.Println("connection is registered")
 
-		case message := <-Broadcast:
-			log.Println("message recieved:", message)
+		case questions := <-Broadcast:
+			log.Println("message received:", questions)
 
-			// Iterate through each player and send back their own message
+			// Encode the QuestionsSet to JSON
+			jsonData, err := json.Marshal(questions)
+			if err != nil {
+				log.Println("error encoding QuestionsSet:", err)
+				continue
+			}
+
 			for connection := range Players {
-				err := connection.WriteMessage(websocket.TextMessage, []byte(message))
-
+				err := connection.WriteMessage(websocket.TextMessage, jsonData)
 				if err != nil {
 					log.Println("write error:", err)
-
 					Unregister <- connection
-					connection.WriteMessage(websocket.CloseMessage, []byte{})
-					connection.Close()
 				}
 			}
 
@@ -70,5 +78,4 @@ func SocketListener() {
 			log.Println("connection is unregistered")
 		}
 	}
-
 }
