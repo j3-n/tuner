@@ -22,6 +22,8 @@ type Lobby struct {
 	Host       string     `json:"-"`
 	LobbyId    string     `json:"lobbyId"`
 	PlayerList []*Player  `json:"players"`
+	State      GameState  `json:"-"`
+	Guesses    int        `json:"-"`
 }
 
 type User struct {
