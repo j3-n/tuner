@@ -5,6 +5,10 @@ import { Lobby } from '../types/Lobby';
 import { H1Component } from '../components/heading';
 import { PlayerComponent } from '../components/player';
 import { Player } from '../types/Player';
+import { ButtonComponent } from '../components/button';
+import { Command } from '../types/Command';
+
+
 
 export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
@@ -12,11 +16,11 @@ export const Route = createLazyFileRoute('/create/$lobbyId')({
 
 function Page() {
   const { lobbyId } = Route.useParams();
+  const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/create`;
 
   const [lobby, setLobby] = useState<Lobby>();
 
-  const [socketUrl] = useState(`ws://${import.meta.env.VITE_HOST_ADDRESS}/create`);
-  useWebSocket(socketUrl, {
+  const { sendJsonMessage } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected")
     },
@@ -30,6 +34,14 @@ function Page() {
     }
   });
 
+  const onClickPlay = () => {
+    const message: Command = {
+      command: "play",
+      body: "",
+    };
+    sendJsonMessage(message)
+  };
+
   return (
     <div className="max-h-screen">
       <div className="text-center items-center">
@@ -41,6 +53,12 @@ function Page() {
               <PlayerComponent player={player}></PlayerComponent>
             </div>
           )}
+        </div>
+
+        <div className="fixed items-center w-1/2 bottom-0">
+          <center>
+            <ButtonComponent onClick={onClickPlay}>Play!</ButtonComponent>
+          </center>
         </div>
       </div>
     </div>

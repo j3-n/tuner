@@ -7,6 +7,7 @@ import {
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
 import { Player } from '../types/Player';
+import { ButtonComponent } from '../components/button';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
@@ -14,11 +15,11 @@ export const Route = createLazyFileRoute('/lobby/$lobbyId')({
 
 function Page() {
   const { lobbyId } = Route.useParams();
+  const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/play/${lobbyId}`;
 
   const [lobby, setLobby] = useState<Lobby>();
 
-  const [socketUrl] = useState(`ws://${import.meta.env.VITE_HOST_ADDRESS}/play/${lobbyId}`);
-  useWebSocket(socketUrl, {
+  const { getWebSocket } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected");
     },
@@ -32,6 +33,10 @@ function Page() {
     }
   });
 
+  const onClickLeave = () => {
+    getWebSocket()?.close()
+  }
+
   return (
     <div className="max-h-screen">
       <div className="text-center items-center pt-20">
@@ -44,6 +49,12 @@ function Page() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="fixed items-center w-1/2 bottom-0">
+        <center>
+          <ButtonComponent onClick={onClickLeave}>Leave!</ButtonComponent>
+        </center>
       </div>
     </div>
   );
