@@ -1,11 +1,11 @@
 package app
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
-	"github.com/zmb3/spotify/v2"
+	"github.com/google/uuid"
 )
 
 func Auth(c *fiber.Ctx) error {
@@ -14,19 +14,19 @@ func Auth(c *fiber.Ctx) error {
 		return err
 	}
 
-	token, err := auth.Token(c.Context(), state, r)
+	_, err = auth.Token(c.Context(), state, r)
 	if err != nil {
 		return err
 	}
 
-	// Create spotify client from token
-	client := spotify.New(auth.Client(c.Context(), token))
-
-	page, _ := client.CurrentUsersTopTracks(c.Context())
-
-	for i, track := range page.Tracks {
-		fmt.Printf("%d: %s - %s (%s)\n", i+1, track.Name, track.Artists[0].Name, track.Album.Name)
-	}
+	// Create token for the client
+	s := uuid.New()
+	// Send the token as a cookie
+	cookie := new(fiber.Cookie)
+	cookie.Name = "TUNER_SESSION"
+	cookie.Value = s.String()
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	c.Cookie(cookie)
 
 	return nil
 }
