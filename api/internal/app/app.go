@@ -24,7 +24,7 @@ type App struct {
 }
 
 func New(args ...Config) App {
-	auth = spotifyauth.New(spotifyauth.WithRedirectURL("http://localhost:4444/auth"), spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate))
+	auth = spotifyauth.New(spotifyauth.WithRedirectURL("http://localhost:4444/auth"), spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate, spotifyauth.ScopeUserTopRead))
 
 	c := Config{
 		Port: ":4444",
