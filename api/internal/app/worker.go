@@ -10,37 +10,38 @@ import (
 	"github.com/j3-n/tuner/api/internal/models"
 )
 
-type Shit struct {
+type ClientData struct {
 	Optype string `json:"command"` // Contains type of operation - GAME START, GUESS ANSWER ETC
 	Data   string `json:"body"`    // Contains data relating to option above
+}
+
+type GuessData struct {
+	AnswerId string `json:"answerId`
 }
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
 	for {
-		var fuck Shit
-		err := c.ReadJSON(&fuck)
+		var data ClientData
+		err := c.ReadJSON(&data)
 		if err != nil {
 			// Player disconnect
 			fmt.Printf("%s has disconnected from lobby %s\n", p.DisplayName, l.LobbyId)
 			break
 		}
 
-		if fuck.Optype == "START" {
+		if data.Optype == "START" {
 			// START GAME AT PLAYERS LOBBY
 			//lobbies.Get(lobby).STARTGAME()
 			// So set state to start game
 			// broadcast to all other
 			game.StartRound(l)
-		} else if fuck.Optype == "GUESS" {
+		} else if data.Optype == "GUESS" {
 			// Data will contain id of answer
 			// Store guess data into channel with data type map[player.uuid]answerIndex. Channel should be stored in Lobby
-			type DonkeyBalls struct {
-				AnswerId string `json:"answerId`
-			}
-			var cock DonkeyBalls
-			c.ReadJSON(cock)
-			answerInt, err := strconv.Atoi(cock.AnswerId)
+			var guessData GuessData
+			c.ReadJSON(guessData)
+			answerInt, err := strconv.Atoi(guessData.AnswerId)
 			if err != nil {
 				fmt.Println("Error converting data from guess")
 			}
