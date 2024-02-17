@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -11,7 +12,7 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
-var gameLobbies []models.Lobby
+var lobbies models.Lobbies
 var users models.Users
 
 // Creates lobby and returns lobby id using bogo lobby algorithm
@@ -22,39 +23,27 @@ func CreateLobby() int {
 	// Generate random id until unique one found ;) pls dont hurt me
 	isUnique := false
 	for !isUnique {
-		isUnique = true
 		randomLobbyID = int(rand.Float64() * 1000)
-		for _, lobby := range gameLobbies {
-			if lobby.LobbyId == fmt.Sprintf("%d", randomLobbyID) {
-				isUnique = false
-			}
-		}
+		isUnique = !lobbies.Exists(fmt.Sprintf("%d", randomLobbyID))
 	}
 
-	gameLobbies = append(gameLobbies, models.Lobby{LobbyId: fmt.Sprintf("%d", randomLobbyID)})
+	lobbies.Add(&models.Lobby{LobbyId: fmt.Sprintf("%d", randomLobbyID)})
 	return randomLobbyID
 }
 
 // Adds player to lobby with provided player id and lobby id
 func AddPlayerToLobby(player *models.Player, lobbyID string) error {
-	for lobbyIndex, lobby := range gameLobbies {
-		if lobby.LobbyId == lobbyID {
-			flag := false
-			// Check that player with given id doesnt exist in lobby
-			for _, playerId := range lobby.PlayerList {
-				if playerId.UUID == player.UUID {
-					flag = true
-				}
-			}
-			if !flag {
-				gameLobbies[lobbyIndex].PlayerList = append(gameLobbies[lobbyIndex].PlayerList, player)
-				return nil
-			} else {
-				return errors.New("Cannot add duplicate player " + player.DisplayName)
-			}
+	lobby := lobbies.Get(lobbyID)
+	if lobby == nil {
+		return errors.New("invalid lobby")
+	}
+	for _, playerId := range lobby.PlayerList {
+		if playerId.UUID == player.UUID {
+			return errors.New("player is already in this lobby")
 		}
 	}
-	return errors.New("Lobby not found")
+	lobby.PlayerList = append(lobby.PlayerList, player)
+	return nil
 }
 
 // Handle websocket request for lobby creation
@@ -85,6 +74,10 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 		return
 	}
 	fmt.Printf("%s is joining lobby %s\n", p.DisplayName, lobby)
+	// Send lobby information as JSON
+	l, _ := json.Marshal(lobbies.Get(lobby))
+	c.WriteMessage(websocket.TextMessage, []byte(l))
+	// Send to running worker
 }
 
 func CreatePlayer(uuid string) *models.Player {

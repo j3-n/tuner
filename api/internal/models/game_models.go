@@ -8,8 +8,8 @@ import (
 )
 
 type Lobby struct {
-	LobbyId    string `json:"lobbyId"`
-	PlayerList []*Player
+	LobbyId    string    `json:"lobbyId"`
+	PlayerList []*Player `json:"players"`
 }
 
 type User struct {
@@ -22,10 +22,45 @@ type Users struct {
 	mu    sync.Mutex
 }
 
+type Lobbies struct {
+	lobbies []*Lobby
+	mu      sync.Mutex
+}
+
 type Player struct {
-	*User
-	Client      *spotify.Client
-	DisplayName string
+	*User       `json:"-"`
+	Client      *spotify.Client `json:"-"`
+	DisplayName string          `json:"displayName"`
+}
+
+func (l *Lobbies) Add(lo *Lobby) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.lobbies = append(l.lobbies, lo)
+}
+
+func (l *Lobbies) Exists(id string) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for _, lo := range l.lobbies {
+		if lo.LobbyId == id {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (l *Lobbies) Get(id string) *Lobby {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, lo := range l.lobbies {
+		if lo.LobbyId == id {
+			return lo
+		}
+	}
+	return nil
 }
 
 func (u *Users) Add(n *User) {
@@ -47,6 +82,8 @@ func (u *Users) Exists(uuid string) bool {
 }
 
 func (u *Users) Get(uuid string) *User {
+	u.mu.Lock()
+	defer u.mu.Unlock()
 	for _, us := range u.users {
 		if us.UUID == uuid {
 			return us
