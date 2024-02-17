@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -9,15 +10,21 @@ import (
 	"github.com/j3-n/tuner/api/internal/models"
 )
 
+type Shit struct {
+	Optype string `json:"command"` // Contains type of operation - GAME START, GUESS ANSWER ETC
+	Data   string `json:"body"`    // Contains data relating to option above
+}
+
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
 	for {
-		type Shit struct {
-			Optype string `json:"command"` // Contains type of operation - GAME START, GUESS ANSWER ETC
-			Data   string `json:"body"`    // Contains data relating to option above
-		}
 		var fuck Shit
-		c.ReadJSON(fuck)
+		err := c.ReadJSON(&fuck)
+		if err != nil {
+			// Player disconnect
+			fmt.Printf("%s has disconnected from lobby %s\n", p.DisplayName, l.LobbyId)
+			break
+		}
 
 		if fuck.Optype == "START" {
 			// START GAME AT PLAYERS LOBBY
@@ -43,4 +50,11 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 
 	// Cleanup
 	l.RemovePlayer(p)
+	if len(l.PlayerList) == 0 {
+		lobbies.RemoveLobby(l)
+	} else {
+		// Rebroadcast lobby
+		data, _ := json.Marshal(l)
+		l.BroadcastToAllPlayers(data)
+	}
 }

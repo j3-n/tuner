@@ -1,27 +1,26 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { H1Component } from '../components/heading';
-import { PlayerComponent } from '../components/player';
-import {
-  useState
-} from 'react';
+import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
+import { H1Component } from '../components/heading';
+import { PlayerComponent } from '../components/player';
 import { Player } from '../types/Player';
 import { ButtonComponent } from '../components/button';
+import { Command } from '../types/Command';
 
-export const Route = createLazyFileRoute('/lobby/$lobbyId')({
+export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
 });
 
 function Page() {
   const { lobbyId } = Route.useParams();
-  const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/play/${lobbyId}`;
+  const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/create`;
 
   const [lobby, setLobby] = useState<Lobby>();
 
-  const { getWebSocket } = useWebSocket(socketUrl, {
+  const { sendMessage, sendJsonMessage } = useWebSocket(socketUrl, {
     onOpen: () => {
-      console.log("connected");
+      console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
       const message = event.data;
@@ -33,13 +32,18 @@ function Page() {
     }
   });
 
-  const onClickLeave = () => {
-    getWebSocket()?.close()
-  }
+  const onClickPlay = () => {
+    const message: Command = {
+      command: "play",
+      body: "",
+    };
+    sendMessage("quiz");
+    sendJsonMessage(message);
+  };
 
   return (
     <div className="max-h-screen">
-      <div className="text-center items-center pt-20">
+      <div className="text-center items-center">
         <H1Component>lobby {lobbyId}</H1Component>
 
         <div className="pt-20 items-center w-1/2 grid grid-flow-col">
@@ -49,12 +53,12 @@ function Page() {
             </div>
           )}
         </div>
-      </div>
 
-      <div className="fixed items-center w-1/2 bottom-0">
-        <center>
-          <ButtonComponent onClick={onClickLeave}>Leave!</ButtonComponent>
-        </center>
+        <div className="fixed items-center w-1/2 bottom-0">
+          <center>
+            <ButtonComponent onClick={onClickPlay}>Play!</ButtonComponent>
+          </center>
+        </div>
       </div>
     </div>
   );
