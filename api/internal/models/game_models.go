@@ -77,6 +77,15 @@ func (l *Lobby) RemovePlayer(p *Player) {
 	}
 }
 
+func (l *Lobby) BroadcastToAllPlayers(m []byte) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for _, p := range l.PlayerList {
+		p.Conn.WriteMessage(websocket.TextMessage, m)
+	}
+}
+
 func (l *Lobbies) Add(lo *Lobby) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
