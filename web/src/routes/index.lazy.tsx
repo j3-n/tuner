@@ -9,7 +9,6 @@ export const Route = createLazyFileRoute('/')({
 function Page() {
   return (
     <div className="p-2 fixed justify-center items-center w-full">
-
       <img src={logoImg} className="h-48 rounded-3xl inline ml-10"></img>
 
       <h1 className="text-8xl font-bold inline ml-10">TUNER</h1>

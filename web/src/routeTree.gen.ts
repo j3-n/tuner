@@ -22,7 +22,6 @@ const CreateLazyImport = createFileRoute('/create')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 const LobbyLobbyIdLazyImport = createFileRoute('/lobby/$lobbyId')()
-const GameGameIdLazyImport = createFileRoute('/game/$gameId')()
 const CreateLobbyIdLazyImport = createFileRoute('/create/$lobbyId')()
 
 // Create/Update Routes
@@ -59,11 +58,6 @@ const LobbyLobbyIdLazyRoute = LobbyLobbyIdLazyImport.update({
   import('./routes/lobby_.$lobbyId.lazy').then((d) => d.Route),
 )
 
-const GameGameIdLazyRoute = GameGameIdLazyImport.update({
-  path: '/game/$gameId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/game_.$gameId.lazy').then((d) => d.Route))
-
 const CreateLobbyIdLazyRoute = CreateLobbyIdLazyImport.update({
   path: '/create/$lobbyId',
   getParentRoute: () => rootRoute,
@@ -99,10 +93,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateLobbyIdLazyImport
       parentRoute: typeof rootRoute
     }
-    '/game/$gameId': {
-      preLoaderRoute: typeof GameGameIdLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/lobby/$lobbyId': {
       preLoaderRoute: typeof LobbyLobbyIdLazyImport
       parentRoute: typeof rootRoute
@@ -119,7 +109,6 @@ export const routeTree = rootRoute.addChildren([
   CreateLazyRoute,
   LobbyLazyRoute,
   CreateLobbyIdLazyRoute,
-  GameGameIdLazyRoute,
   LobbyLobbyIdLazyRoute,
 ])
 
