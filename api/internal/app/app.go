@@ -82,16 +82,16 @@ func (a *App) Run() {
 		}
 		return fiber.ErrUpgradeRequired
 	})
-	a.Fiber.Get("/create_lobby/:playerId", websocket.New(HandleCreationRequest))
+	a.Fiber.Get("/create", websocket.New(HandleCreationRequest))
 
-	a.Fiber.Use("/add_player_lobby", func(c *fiber.Ctx) error {
+	a.Fiber.Use("/play", func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {
 			c.Locals("allowed", true)
 			return c.Next()
 		}
 		return fiber.ErrUpgradeRequired
 	})
-	a.Fiber.Get("/add_player_lobby/", websocket.New(HandleAddPlayerRequest))
+	a.Fiber.Get("/play/:lobby", websocket.New(HandleAddPlayerRequest))
 
 	a.Fiber.Use(redirect.New(redirect.Config{
 		Rules: map[string]string{

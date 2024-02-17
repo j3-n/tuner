@@ -1,11 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/google/uuid"
+	"github.com/j3-n/tuner/api/internal/models"
 )
 
 func Auth(c *fiber.Ctx) error {
@@ -29,10 +31,12 @@ func Auth(c *fiber.Ctx) error {
 	c.Cookie(cookie)
 
 	// Register the player
-	users.Add(&User{
-		uuid:  s.String(),
-		token: token,
+	users.Add(&models.User{
+		UUID:  s.String(),
+		Token: token,
 	})
+
+	fmt.Printf("%s registered\n", s.String())
 
 	return nil
 }
