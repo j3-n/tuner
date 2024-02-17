@@ -73,6 +73,21 @@ func (l *Lobby) RemovePlayer(p *Player) {
 			// Found the player
 			l.PlayerList[i] = l.PlayerList[len(l.PlayerList)-1]
 			l.PlayerList = l.PlayerList[:len(l.PlayerList)-1]
+			return
+		}
+	}
+}
+
+func (l *Lobbies) RemoveLobby(lo *Lobby) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for i, lob := range l.lobbies {
+		if lo.LobbyId == lob.LobbyId {
+			// Found the lobby
+			l.lobbies[i] = l.lobbies[len(l.lobbies)-1]
+			l.lobbies = l.lobbies[:len(l.lobbies)-1]
+			return
 		}
 	}
 }
