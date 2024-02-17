@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { LinkComponent } from '../components/link';
 
 export const Route = createLazyFileRoute('/')({
   component: Page,
@@ -6,8 +7,11 @@ export const Route = createLazyFileRoute('/')({
 
 function Page() {
   return (
-    <div className="p-2">
-      <h3 className="">Home</h3>
+    <div className="p-2 fixed justify-center items-center">
+      <h1>welcome to tuner!</h1>
+
+      <LinkComponent to='/create'>create game</LinkComponent>
+      <LinkComponent to='/lobby'>join game</LinkComponent>
     </div>
   );
 }

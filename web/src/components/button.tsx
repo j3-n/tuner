@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 
 type Props = {
+  onClick?: () => void;
   children?: ReactNode;
 }
 
-export const ButtonComponent: React.FC<Props> = ({ children }) => {
+export const ButtonComponent: React.FC<Props> = ({ onClick, children }) => {
   return (
     <div className="rounded-lg p-2 border-2 border-teal-200 bg-teal-100 hover:bg-teal-200">
-      <button>
+      <button onClick={onClick}>
         {children && children}
       </button>
     </div>

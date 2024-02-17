@@ -18,9 +18,10 @@ import { Route as R404Import } from './routes/__404'
 // Create Virtual Routes
 
 const LobbyLazyImport = createFileRoute('/lobby')()
+const CreateLazyImport = createFileRoute('/create')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
-const LobbyLobbyIdLazyImport = createFileRoute('/_lobby/$lobbyId')()
+const LobbyLobbyIdLazyImport = createFileRoute('/lobby/$lobbyId')()
 
 // Create/Update Routes
 
@@ -28,6 +29,11 @@ const LobbyLazyRoute = LobbyLazyImport.update({
   path: '/lobby',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/lobby.lazy').then((d) => d.Route))
+
+const CreateLazyRoute = CreateLazyImport.update({
+  path: '/create',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/create.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -45,10 +51,10 @@ const IndexLazyRoute = IndexLazyImport.update({
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const LobbyLobbyIdLazyRoute = LobbyLobbyIdLazyImport.update({
-  id: '/_lobby/$lobbyId',
+  path: '/lobby/$lobbyId',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/_lobby.$lobbyId.lazy').then((d) => d.Route),
+  import('./routes/lobby_.$lobbyId.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -67,11 +73,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/create': {
+      preLoaderRoute: typeof CreateLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/lobby': {
       preLoaderRoute: typeof LobbyLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_lobby/$lobbyId': {
+    '/lobby/$lobbyId': {
       preLoaderRoute: typeof LobbyLobbyIdLazyImport
       parentRoute: typeof rootRoute
     }
@@ -84,6 +94,7 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   R404Route,
   AboutLazyRoute,
+  CreateLazyRoute,
   LobbyLazyRoute,
   LobbyLobbyIdLazyRoute,
 ])
