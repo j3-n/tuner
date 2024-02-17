@@ -8,6 +8,15 @@ import (
 	"golang.org/x/oauth2"
 )
 
+type GameState int
+
+const (
+	Waiting  GameState = iota // 0
+	Guessing                  // 1
+	Results                   // 2
+	Finish                    // 3
+)
+
 type Lobby struct {
 	LobbyId         string    `json:"lobbyId"`
 	PlayerList      []*Player `json:"players"`
