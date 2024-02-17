@@ -60,6 +60,15 @@ func (a *App) Run() {
 	a.Fiber.Get("/api/v1/questions", endpoints.GetQuestions)
 	a.Fiber.Post("/api/v1/user_answer", endpoints.PostUserAnswer)
 
+	a.Fiber.Use("/create_lobby", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+	a.Fiber.Get("/create_lobby/:playerId", websocket.New(HandleCreationRequest))
+
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
 
