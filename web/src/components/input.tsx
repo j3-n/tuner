@@ -1,16 +1,20 @@
 type Props = {
   placeholder?: string;
-  value?: string;
+  id: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 
-export const InputComponent: React.FC<Props> = ({ placeholder, value, onChange }) => {
+export const InputComponent: React.FC<Props> = ({
+  placeholder,
+  id,
+  onChange
+}) => {
   return (
     <div>
       <input
         placeholder={placeholder}
-        value={value}
+        id={id}
         onChange={onChange}
       />
     </div>
