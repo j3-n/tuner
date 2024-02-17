@@ -8,9 +8,10 @@ import (
 )
 
 type Lobby struct {
-	Host       string    `json:"-"`
-	LobbyId    string    `json:"lobbyId"`
-	PlayerList []*Player `json:"players"`
+	mu         sync.Mutex `json:"-"`
+	Host       string     `json:"-"`
+	LobbyId    string     `json:"lobbyId"`
+	PlayerList []*Player  `json:"players"`
 }
 
 type User struct {
@@ -32,6 +33,37 @@ type Player struct {
 	*User       `json:"-"`
 	Client      *spotify.Client `json:"-"`
 	DisplayName string          `json:"displayName"`
+}
+
+func (l *Lobby) AddPlayer(p *Player) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.PlayerList = append(l.PlayerList, p)
+}
+
+func (l *Lobby) HasPlayer(p *Player) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for _, pl := range l.PlayerList {
+		if pl.UUID == p.UUID {
+			return true
+		}
+	}
+	return false
+}
+
+func (l *Lobby) RemovePlayer(p *Player) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for i, pl := range l.PlayerList {
+		if pl.UUID == p.UUID {
+			// Found the player
+			l.PlayerList[i] = l.PlayerList[len(l.PlayerList)-1]
+			l.PlayerList = l.PlayerList[:len(l.PlayerList)-1]
+		}
+	}
 }
 
 func (l *Lobbies) Add(lo *Lobby) {

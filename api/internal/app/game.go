@@ -37,23 +37,23 @@ func AddPlayerToLobby(player *models.Player, lobbyID string) error {
 	if lobby == nil {
 		return errors.New("invalid lobby")
 	}
-	for _, playerId := range lobby.PlayerList {
-		if playerId.UUID == player.UUID {
-			return errors.New("player is already in this lobby")
-		}
+	if lobby.HasPlayer(player) {
+		return errors.New("player already in lobby")
 	}
-	lobby.PlayerList = append(lobby.PlayerList, player)
+	lobby.AddPlayer(player)
 	return nil
 }
 
 // Handle websocket request for lobby creation
 func HandleCreationRequest(c *websocket.Conn) {
 	// Create lobby
+	defer c.Close()
 	id := CreateLobby()
 	JoinLobby(c, fmt.Sprintf("%d", id))
 }
 
 func HandleAddPlayerRequest(c *websocket.Conn) {
+	defer c.Close()
 	id := c.Params("lobby")
 	JoinLobby(c, id)
 }
@@ -76,7 +76,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	l, _ := json.Marshal(lobbies.Get(lobby))
 	c.WriteMessage(websocket.TextMessage, []byte(l))
 	// Send to running worker
-	go PlayerWorker(c, p, lobbies.Get(lobby))
+	PlayerWorker(c, p, lobbies.Get(lobby))
 }
 
 func CreatePlayer(uuid string) *models.Player {
