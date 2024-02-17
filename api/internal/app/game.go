@@ -5,12 +5,32 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync"
+	"strings"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/models"
+	"golang.org/x/oauth2"
 )
 
+type User struct {
+	uuid  string
+	token *oauth2.Token
+}
+
+type Users struct {
+	users []*User
+	mu    *sync.Mutex
+}
+
 var gameLobbies []models.Lobby
+var users Users
+
+func (u *Users) Add(n *User) {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	u.users = append(u.users, n)
+}
 
 // Creates lobby and returns lobby id using bogo lobby algorithm
 func CreateLobby(hostPlayer int) int {
@@ -69,5 +89,16 @@ func HandleCreationRequest(c *websocket.Conn) {
 	CreateLobby(receivedPlayerId)
 }
 
+// Reads player id and lobby id and assigns player to lobby if both player id and lobby exist
 func HandleAddPlayerRequest(c *websocket.Conn) {
+	mt, msgb, err := c.ReadMessage() // Read playerId:lobbyId
+	if err != nil {
+		fmt.Printf("Error reading lobby assignment input")
+	}
+	msg := string(msgb[:])
+	msgSplit := strings.Split(msg, ":")
+	fmt.Println("Received: " + msgSplit[0]+", "+msgSplit[])
+
+	c.WriteMessage(mt, []byte("Test1"))
+
 }
