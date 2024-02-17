@@ -5,11 +5,15 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
 export const Route = createRootRoute({
-  component: () => (
+  component: Page
+});
+
+function Page() {
+  return (
     <>
       <hr />
       <Outlet />
       <TanStackRouterDevtools />
     </>
-  ),
-});
+  );
+}
