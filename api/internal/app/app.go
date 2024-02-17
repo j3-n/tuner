@@ -6,16 +6,16 @@ import (
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/redirect"
+	"github.com/j3-n/tuner/api/internal/endpoints"
+	"github.com/j3-n/tuner/api/internal/models"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 )
 
 var (
 	auth  *spotifyauth.Authenticator
 	state = "joemama"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/j3-n/tuner/api/internal/endpoints"
-	"github.com/j3-n/tuner/api/internal/models"
 )
 
 type Config struct {
