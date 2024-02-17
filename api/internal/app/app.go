@@ -76,6 +76,15 @@ func (a *App) Run() {
 	})
 	a.Fiber.Get("/create_lobby/:playerId", websocket.New(HandleCreationRequest))
 
+	a.Fiber.Use("/add_player_lobby", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+	a.Fiber.Get("/add_player_lobby/", websocket.New(HandleAddPlayerRequest))
+
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
 

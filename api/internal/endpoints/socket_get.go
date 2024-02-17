@@ -52,6 +52,7 @@ func SocketListener() {
 		case message := <-Broadcast:
 			log.Println("message recieved:", message)
 
+			// Iterate through each player and send back their own message
 			for connection := range Players {
 				err := connection.WriteMessage(websocket.TextMessage, []byte(message))
 

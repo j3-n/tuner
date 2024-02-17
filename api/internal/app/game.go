@@ -12,7 +12,7 @@ import (
 
 var gameLobbies []models.Lobby
 
-// Creates lobby and returns lobby id
+// Creates lobby and returns lobby id using bogo lobby algorithm
 func CreateLobby(hostPlayer int) int {
 
 	randomLobbyID := -1
@@ -55,6 +55,7 @@ func AddPlayerToLobby(player models.Player, lobbyID int) error {
 	return nil
 }
 
+// Handle websocket request for lobby creation
 func HandleCreationRequest(c *websocket.Conn) {
 	receivedPlayerId, err := strconv.Atoi(c.Params("playerId"))
 	if err != nil {
@@ -62,6 +63,11 @@ func HandleCreationRequest(c *websocket.Conn) {
 		return
 	}
 	fmt.Printf("Received params: %d\n", receivedPlayerId)
-	// Authenticate player first
+	// Check player is actually connected
+
+	// Create lobby
 	CreateLobby(receivedPlayerId)
+}
+
+func HandleAddPlayerRequest(c *websocket.Conn) {
 }
