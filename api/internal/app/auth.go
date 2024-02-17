@@ -14,7 +14,7 @@ func Auth(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err = auth.Token(c.Context(), state, r)
+	token, err := auth.Token(c.Context(), state, r)
 	if err != nil {
 		return err
 	}
@@ -29,6 +29,10 @@ func Auth(c *fiber.Ctx) error {
 	c.Cookie(cookie)
 
 	// Register the player
+	users.Add(&User{
+		uuid:  s.String(),
+		token: token,
+	})
 
 	return nil
 }

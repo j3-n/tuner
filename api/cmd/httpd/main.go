@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	godotenv.Load()
 	a := app.New()
 	a.Run()
