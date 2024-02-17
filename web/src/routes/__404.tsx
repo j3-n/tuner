@@ -7,9 +7,9 @@ export const Route = createFileRoute('/__404')({
 });
 
 function Page() {
-    return (
-      <div className="grid h-screen place-content-center bg-white px-4">
-        <h1 className="">404 | Not Found</h1>
-      </div>
-    );
-  }
+  return (
+    <div className="grid h-screen place-content-center bg-white px-4">
+      <h1 className="">404 | Not Found</h1>
+    </div>
+  );
+}
