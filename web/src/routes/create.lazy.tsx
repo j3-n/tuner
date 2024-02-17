@@ -5,10 +5,10 @@ export const Route = createLazyFileRoute('/create')({
 })
 
 function Page() {
-  
 
   return (
     <>
+      {}
     </>
   );
 }

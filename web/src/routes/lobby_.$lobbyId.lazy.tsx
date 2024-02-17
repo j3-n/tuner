@@ -7,35 +7,29 @@ import {
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
 import { Player } from '../types/Player';
-import { MessageType } from '../lib/Message';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
 });
-
-type Response = {
-  type: MessageType;
-  lobby?: Lobby;
-}
 
 function Page() {
   const { lobbyId } = Route.useParams();
 
   const [lobby, setLobby] = useState<Lobby>();
 
-  const [socketUrl] = useState(`ws://${import.meta.env.VITE_HOST_ADDRESS}/game/${lobbyId}`);
+  const [socketUrl] = useState(`ws://${import.meta.env.VITE_HOST_ADDRESS}/play/${lobbyId}`);
   useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected");
     },
     onMessage: (event: WebSocketEventMap['message']) => {
       const message = event.data;
-
-      const response: Response = JSON.parse(message);
-      if (response.type == MessageType.Lobby) {
-        setLobby(response.lobby)
-      }
+      console.log(message);
+      setLobby(JSON.parse(message));
     },
+    onClose: () => {
+
+    }
   });
 
   return (
