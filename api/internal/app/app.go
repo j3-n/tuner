@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/j3-n/tuner/api/internal/endpoints"
 )
 
 type Config struct {
@@ -17,7 +18,6 @@ type App struct {
 }
 
 func New(args ...Config) App {
-
 	c := Config{
 		Port: ":4444",
 		Log:  false,
@@ -40,6 +40,8 @@ func (a *App) Run() {
 	a.Fiber.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+
+	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
 
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
