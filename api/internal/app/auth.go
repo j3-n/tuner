@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,23 +10,25 @@ import (
 )
 
 func Auth(c *fiber.Ctx) error {
+	ctx := context.Background()
+
 	r, err := adaptor.ConvertRequest(c, false)
 	if err != nil {
 		return err
 	}
 
-	token, err := auth.Token(c.Context(), state, r)
+	token, err := auth.Token(ctx, state, r)
 	if err != nil {
 		return err
 	}
 
 	// Create spotify client from token
-	client := spotify.New(auth.Client(c.Context(), token))
+	client := spotify.New(auth.Client(ctx, token))
 
-	page, _ := client.CurrentUsersTopTracks(c.Context())
+	page, _ := client.CurrentUsersTopTracks(ctx)
 
 	for i, track := range page.Tracks {
-		fmt.Printf("%d: %s - %s (%s)\n", i+1, track.Name, track.Artists[0].Name, track.Album.Name)
+		fmt.Printf("%d: %s - %s (%s)\n", i+1, track.Name, track.Artists[0].Name, track.PreviewURL)
 	}
 
 	return nil
