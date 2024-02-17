@@ -28,7 +28,7 @@ function Page() {
       setLobby(JSON.parse(message));
     },
     onClose: () => {
-
+      console.log("disconnected")
     }
   });
 
