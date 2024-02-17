@@ -3,6 +3,7 @@ package models
 import (
 	"sync"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/zmb3/spotify/v2"
 	"golang.org/x/oauth2"
 )
@@ -32,6 +33,7 @@ type Player struct {
 	*User       `json:"-"`
 	Client      *spotify.Client `json:"-"`
 	DisplayName string          `json:"displayName"`
+	Conn        websocket.Conn
 }
 
 func (l *Lobbies) Add(lo *Lobby) {

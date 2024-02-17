@@ -79,6 +79,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	l, _ := json.Marshal(lobbies.Get(lobby))
 	c.WriteMessage(websocket.TextMessage, []byte(l))
 	// Send to running worker
+	go MonitorPlayer(c, *p, lobby)
 }
 
 func CreatePlayer(uuid string) *models.Player {
@@ -95,6 +96,28 @@ func CreatePlayer(uuid string) *models.Player {
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
+	}
+
+}
+
+// Listener for each player
+func MonitorPlayer(c *websocket.Conn, p models.Player, lobby string) {
+	type Shit struct {
+		Optype string // Contains type of operation - GAME START, GUESS ANSWER ETC
+		Data   string // Contains data relating to option above
+	}
+	var fuck Shit
+	c.ReadJSON(fuck)
+
+	if fuck.Optype == "START" {
+		// START GAME AT PLAYERS LOBBY
+		//lobbies.Get(lobby).STARTGAME()
+		// So set state to start game
+		// broadcast to all other
+	} else if fuck.Optype == "GUESS" {
+		// Data will contain id of answer
+		// Send this data to nathans function which will evaluate it when round is over
+		// nathans function should wait till all people in lobby have given an answer
 	}
 
 }
