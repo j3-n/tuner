@@ -7,8 +7,15 @@ import (
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/redirect"
 	"github.com/j3-n/tuner/api/internal/endpoints"
 	"github.com/j3-n/tuner/api/internal/models"
+	spotifyauth "github.com/zmb3/spotify/v2/auth"
+)
+
+var (
+	auth  *spotifyauth.Authenticator
+	state = "joemama"
 )
 
 type Config struct {
@@ -22,6 +29,7 @@ type App struct {
 }
 
 func New(args ...Config) App {
+	auth = spotifyauth.New(spotifyauth.WithRedirectURL("http://localhost:4444/auth"), spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate, spotifyauth.ScopeUserTopRead))
 	c := Config{
 		Port: ":4444",
 		Log:  false,
@@ -84,6 +92,14 @@ func (a *App) Run() {
 		return fiber.ErrUpgradeRequired
 	})
 	a.Fiber.Get("/add_player_lobby/", websocket.New(HandleAddPlayerRequest))
+
+	a.Fiber.Use(redirect.New(redirect.Config{
+		Rules: map[string]string{
+			"/login": auth.AuthURL(state),
+		},
+	}))
+
+	a.Fiber.Get("/auth", Auth)
 
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
