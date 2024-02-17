@@ -48,14 +48,12 @@ func AddPlayerToLobby(player *models.Player, lobbyID string) error {
 
 // Handle websocket request for lobby creation
 func HandleCreationRequest(c *websocket.Conn) {
-	defer c.Close()
 	// Create lobby
 	id := CreateLobby()
 	JoinLobby(c, fmt.Sprintf("%d", id))
 }
 
 func HandleAddPlayerRequest(c *websocket.Conn) {
-	defer c.Close()
 	id := c.Params("lobby")
 	JoinLobby(c, id)
 }
@@ -78,6 +76,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	l, _ := json.Marshal(lobbies.Get(lobby))
 	c.WriteMessage(websocket.TextMessage, []byte(l))
 	// Send to running worker
+	go PlayerWorker(c, p, lobbies.Get(lobby))
 }
 
 func CreatePlayer(uuid string) *models.Player {

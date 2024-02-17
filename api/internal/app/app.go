@@ -8,8 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/redirect"
-	"github.com/j3-n/tuner/api/internal/endpoints"
-	"github.com/j3-n/tuner/api/internal/models"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 )
 
@@ -49,48 +47,14 @@ func New(args ...Config) App {
 
 func (a *App) Run() {
 
-	a.Fiber.Get("/api/v1/questions", func(c *fiber.Ctx) error {
-		eer := models.QuestionsSet[1]
-
-		return c.JSON(eer)
-	})
-
 	a.Fiber.Use(cors.New(cors.Config{
 		AllowOriginsFunc: func(origin string) bool {
 			return os.Getenv("ENVIRONMENT") == "development"
 		},
 	}))
 
-	a.Fiber.Use("/ws", func(c *fiber.Ctx) error {
-		if websocket.IsWebSocketUpgrade(c) {
-			c.Locals("allowed", true)
-			return c.Next()
-		}
-		return fiber.ErrUpgradeRequired
-	})
-
-	go endpoints.SocketListener()
-
-	a.Fiber.Get("/ws/:id", websocket.New(endpoints.GetSocket))
-	a.Fiber.Get("/api/v1/questions", endpoints.GetQuestions)
-	a.Fiber.Post("/api/v1/user_answer", endpoints.PostUserAnswer)
-
-	a.Fiber.Use("/create_lobby", func(c *fiber.Ctx) error {
-		if websocket.IsWebSocketUpgrade(c) {
-			c.Locals("allowed", true)
-			return c.Next()
-		}
-		return fiber.ErrUpgradeRequired
-	})
 	a.Fiber.Get("/create", websocket.New(HandleCreationRequest))
 
-	a.Fiber.Use("/play", func(c *fiber.Ctx) error {
-		if websocket.IsWebSocketUpgrade(c) {
-			c.Locals("allowed", true)
-			return c.Next()
-		}
-		return fiber.ErrUpgradeRequired
-	})
 	a.Fiber.Get("/play/:lobby", websocket.New(HandleAddPlayerRequest))
 
 	a.Fiber.Use(redirect.New(redirect.Config{
