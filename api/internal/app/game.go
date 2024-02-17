@@ -76,7 +76,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	// Send lobby information as JSON to all connected players
 	lo := lobbies.Get(lobby)
 	l, _ := json.Marshal(lo)
-	lo.BroadcastToAllPlayers([]byte(l))
+	lo.BroadcastToAllPlayers(l)
 	// Send to running worker
 	PlayerWorker(c, p, lo)
 }

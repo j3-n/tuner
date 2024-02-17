@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/gofiber/contrib/websocket"
@@ -26,5 +27,9 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	l.RemovePlayer(p)
 	if len(l.PlayerList) == 0 {
 		lobbies.RemoveLobby(l)
+	} else {
+		// Rebroadcast lobby
+		data, _ := json.Marshal(l)
+		l.BroadcastToAllPlayers(data)
 	}
 }
