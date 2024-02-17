@@ -24,5 +24,5 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	}
 
 	// Cleanup
-
+	l.RemovePlayer(p)
 }
