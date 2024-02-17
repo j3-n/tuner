@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/j3-n/tuner/api/internal/endpoints"
 	"github.com/j3-n/tuner/api/internal/quiz"
 )
 
@@ -50,6 +51,8 @@ func (a *App) Run() {
 			return os.Getenv("ENVIRONMENT") == "development"
 		},
 	}))
+
+	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
 
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
