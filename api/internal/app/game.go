@@ -2,7 +2,11 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
+	"strconv"
+
+	"github.com/gofiber/contrib/websocket"
 )
 
 type Lobby struct {
@@ -18,7 +22,7 @@ type Player struct {
 var gameLobbies []Lobby
 
 // Creates lobby and returns lobby id
-func CreateLobby() int {
+func CreateLobby(hostPlayer int) int {
 
 	randomLobbyID := -1
 
@@ -35,6 +39,7 @@ func CreateLobby() int {
 	}
 
 	gameLobbies = append(gameLobbies, Lobby{lobbyId: randomLobbyID})
+	AddPlayerToLobby(Player{playerId: hostPlayer, name: "John"}, randomLobbyID)
 	return randomLobbyID
 }
 
@@ -57,4 +62,15 @@ func AddPlayerToLobby(player Player, lobbyID int) error {
 		}
 	}
 	return nil
+}
+
+func HandleCreationRequest(c *websocket.Conn) {
+	receivedPlayerId, err := strconv.Atoi(c.Params("playerId"))
+	if err != nil {
+		fmt.Printf("Error parsing player id: %s\n", c.Params("playerId"))
+		return
+	}
+	fmt.Printf("Received params: %d\n", receivedPlayerId)
+	// Authenticate player first
+	CreateLobby(receivedPlayerId)
 }

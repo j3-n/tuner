@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/j3-n/tuner/api/internal/endpoints"
@@ -53,6 +54,15 @@ func (a *App) Run() {
 	}))
 
 	a.Fiber.Post("/user_answer", endpoints.PostUserAnswer)
+
+	a.Fiber.Use("/create_lobby", func(c *fiber.Ctx) error {
+		if websocket.IsWebSocketUpgrade(c) {
+			c.Locals("allowed", true)
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+	a.Fiber.Get("/create_lobby/:playerId", websocket.New(HandleCreationRequest))
 
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
