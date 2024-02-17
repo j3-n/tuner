@@ -12,7 +12,7 @@ var (
 	Players    = make(map[*websocket.Conn]struct{})
 	Register   = make(chan *websocket.Conn)
 	Unregister = make(chan *websocket.Conn)
-	Broadcast  = make(chan models.Questions)
+	Broadcast  = make(chan models.Question)
 )
 
 func GetSocket(c *websocket.Conn) {
