@@ -3,15 +3,9 @@ module github.com/j3-n/tuner/api
 go 1.21
 
 require (
-	github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/fiber/v2 v2.52.0
 	github.com/joho/godotenv v1.5.1
 	github.com/zmb3/spotify/v2 v2.4.1
-)
-
-require (
-	github.com/gofiber/utils v0.0.10 // indirect
-	github.com/gorilla/schema v1.1.0 // indirect
 )
 
 require (
