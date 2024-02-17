@@ -3,8 +3,18 @@ package models
 import (
 	"sync"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/zmb3/spotify/v2"
 	"golang.org/x/oauth2"
+)
+
+type GameState int
+
+const (
+	Waiting  GameState = iota // 0
+	Guessing                  // 1
+	Results                   // 2
+	Finish                    // 3
 )
 
 type Lobby struct {
@@ -33,6 +43,7 @@ type Player struct {
 	*User       `json:"-"`
 	Client      *spotify.Client `json:"-"`
 	DisplayName string          `json:"displayName"`
+	Conn        *websocket.Conn `json:"-"`
 }
 
 func (l *Lobby) AddPlayer(p *Player) {
@@ -63,6 +74,15 @@ func (l *Lobby) RemovePlayer(p *Player) {
 			l.PlayerList[i] = l.PlayerList[len(l.PlayerList)-1]
 			l.PlayerList = l.PlayerList[:len(l.PlayerList)-1]
 		}
+	}
+}
+
+func (l *Lobby) BroadcastToAllPlayers(m []byte) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	for _, p := range l.PlayerList {
+		p.Conn.WriteMessage(websocket.TextMessage, m)
 	}
 }
 
