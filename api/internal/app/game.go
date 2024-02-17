@@ -61,7 +61,7 @@ func HandleAddPlayerRequest(c *websocket.Conn) {
 
 func JoinLobby(c *websocket.Conn, lobby string) {
 	// Check player authentication
-	p := CreatePlayer(c.Cookies("TUNER_SESSION"))
+	p := CreatePlayer(c, c.Cookies("TUNER_SESSION"))
 	if p == nil {
 		c.WriteMessage(websocket.TextMessage, []byte("Not authenticated!"))
 		return
@@ -81,7 +81,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	PlayerWorker(c, p, lo)
 }
 
-func CreatePlayer(uuid string) *models.Player {
+func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
 	// Check that the Spotify token still works
 	if len(uuid) == 0 || !users.Exists(uuid) {
 		return nil
@@ -95,6 +95,7 @@ func CreatePlayer(uuid string) *models.Player {
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
+		Conn:        c,
 	}
 
 }
