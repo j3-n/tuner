@@ -139,6 +139,7 @@ func (l *Lobby) HasPlayer(p *Player) bool {
 func (l *Lobby) RemovePlayer(p *Player) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
+	l.State = Waiting
 
 	for i, pl := range l.PlayerList {
 		if pl.UUID == p.UUID {

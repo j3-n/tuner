@@ -15,6 +15,7 @@ import { LeaderboardComponent } from '../components/leaderboard';
 import { SongComponent } from '../components/song';
 import { BackgroundComponent } from '../components/background';
 import QRCode from 'react-qr-code';
+import { LinkComponent } from '../components/link';
 
 export const Route = createLazyFileRoute('/create')({
   component: Page
@@ -35,18 +36,9 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
-      console.log(event)
-
-      if (event.data === null || event === null || event.data === undefined || event === undefined || event.data === '0') {
-        return;
-      }
-
       try {
         const message = event.data;
         const command = JSON.parse(message);
-
-        console.log(JSON.stringify(command));
-
 
         switch (command?.command) {
           case "WAITING":
@@ -110,9 +102,9 @@ function Page() {
       <div className="text-center items-center pt-20">
         <h1 className="text-slate-100 text-8xl font-bold bg-slate-800 bg-opacity-75 py-5">Lobby: {lobby?.lobbyId}</h1>
         {state != State.Waiting &&
-          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl mt-5 p-1">
+          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl text-slate-100 text-3xl mt-5 p-1">
             <center>
-              <ButtonComponent onClick={onClickLeave}>Leave Game</ButtonComponent>
+              <LinkComponent to="/" onClick={onClickLeave} size='lg'>Leave Game</LinkComponent>
             </center>
           </div>
         }
@@ -131,7 +123,7 @@ function Page() {
 
         {state === State.Waiting && lobby &&
           <div>
-            <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
+            <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/lobby/${lobby?.lobbyId}`}></QRCode>
             <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
               {lobby && lobby.players.map((player: Player, index: number) =>
                 <PlayerComponent showScore={false} key={index} player={player}></PlayerComponent>

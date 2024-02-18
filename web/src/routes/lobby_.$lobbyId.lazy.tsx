@@ -4,7 +4,6 @@ import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
 import { Player } from '../types/Player';
-import { ButtonComponent } from '../components/button';
 import { State } from '../lib/State';
 import { AnswerComponent } from '../components/answer';
 import { Question } from '../types/Question';
@@ -15,6 +14,7 @@ import { LeaderboardComponent } from '../components/leaderboard';
 import { BackgroundComponent } from '../components/background';
 import QRCode from 'react-qr-code';
 import { SongComponent } from '../components/song';
+import { LinkComponent } from '../components/link';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
@@ -36,17 +36,9 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
-      console.log(event)
-
-      if (event.data === null || event === null || event.data === undefined || event === undefined || event.data === '0') {
-        return;
-      }
-
       try {
         const message = event.data;
         const command = JSON.parse(message);
-
-        console.log(JSON.stringify(command));
 
         switch (command?.command) {
           case "WAITING":
@@ -102,9 +94,9 @@ function Page() {
       <div className="text-center items-center pt-20">
         <h1 className="text-slate-100 text-8xl font-bold bg-slate-800 bg-opacity-75 py-5">Lobby: {lobby?.lobbyId}</h1>
         {state != State.Waiting &&
-          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl mt-5 p-1">
+          <div className="mx-auto items-center w-1/4 bg-red-700 text-slate-100 text-3xl rounded-xl mt-5 p-1">
             <center>
-              <ButtonComponent onClick={onClickLeave}>Leave Game</ButtonComponent>
+              <LinkComponent to="/" onClick={onClickLeave} size='lg'>Leave Game</LinkComponent>
             </center>
           </div>
         }

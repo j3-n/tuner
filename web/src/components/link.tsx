@@ -3,12 +3,14 @@ import { ReactNode } from "react";
 
 type Props = {
   to: string;
+  onClick?: () => void;
   size?: "sm" | "lg";
   children?: ReactNode;
 }
 
 export const LinkComponent: React.FC<Props> = ({
   to,
+  onClick,
   size,
   children
 }): JSX.Element => {
@@ -21,7 +23,7 @@ export const LinkComponent: React.FC<Props> = ({
   }
 
   return (
-    <Link className="" to={to}>
+    <Link className="" to={to} onClick={onClick}>
       <div className={className}>
         {children && children}
       </div>

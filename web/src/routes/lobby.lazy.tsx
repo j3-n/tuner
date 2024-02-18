@@ -11,7 +11,8 @@ export const Route = createLazyFileRoute('/lobby')({
 });
 
 function Page() {
-  const [lobbyCode, setLobbyCode] = useState<string>("");
+  const baseUrl = `http://${import.meta.env.VITE_WEB_ADDRESS}/lobby`
+  const [lobbyCode, setLobbyCode] = useState<string>();
 
   useEffect(() => {
     console.log(lobbyCode)
@@ -25,7 +26,7 @@ function Page() {
     <div>
         <InputComponent placeholder="Lobby Code" id="input" onChange={handleInputChange} /><br />
         <div className="bg-green-600 rounded-xl w-1/3 h-20 mx-auto">
-          <LinkComponent to={`http://${import.meta.env.VITE_HOST_ADDRESS}/login`} size='lg'>
+          <LinkComponent to={`${baseUrl}/${lobbyCode}`} size='lg'>
             <p className="text-4xl text-slate-100">
               Join
             </p>
