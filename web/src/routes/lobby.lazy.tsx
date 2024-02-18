@@ -5,7 +5,6 @@ import {
   useEffect,
   useState
 } from 'react';
-import { SongComponent } from '../components/song';
 
 export const Route = createLazyFileRoute('/lobby')({
   component: Page
@@ -24,13 +23,14 @@ function Page() {
 
   return (
     <div>
-      <h1 className="">Hello /lobby!</h1>
-
-      <div className="flex">
-        <InputComponent placeholder="lobby code" id="input" onChange={handleInputChange} />
-        <LinkComponent to={`/lobby/${lobbyCode}`}>go</LinkComponent>
-        <SongComponent src="https://p.scdn.co/mp3-preview/cea8b314f8b3777c6b87a45187b7b522d3911fde?cid=79ca1b48bc314222a4699a62a130764c"></SongComponent>
-      </div>
+        <InputComponent placeholder="Lobby Code" id="input" onChange={handleInputChange} /><br />
+        <div className="bg-green-600 rounded-xl w-1/3 h-20 mx-auto">
+          <LinkComponent to={`http://${import.meta.env.VITE_HOST_ADDRESS}/login`} size='lg'>
+            <p className="text-4xl text-slate-100">
+              Join
+            </p>
+          </LinkComponent>
+        </div>
     </div>
   );
 }
