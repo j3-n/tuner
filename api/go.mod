@@ -10,6 +10,8 @@ require (
 
 require (
 	github.com/fasthttp/websocket v1.5.7 // indirect
+	github.com/gofiber/utils v0.0.10 // indirect
+	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
@@ -20,6 +22,7 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/gofiber/contrib/websocket v1.3.0
+	github.com/gofiber/fiber v1.14.6
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.5.0
 	github.com/klauspost/compress v1.17.3 // indirect
