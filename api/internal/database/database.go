@@ -44,8 +44,8 @@ func (s *Store) Close() error {
 }
 
 // Gets ALL the records from table
-func (s *Store) List(i interface{}, t string) error {
-	result := s.DB.Table(t).Find(i)
+func (s *Store) List(i interface{}, t string, primary ...interface{}) error {
+	result := s.DB.Table(t).Find(i, primary...)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -84,8 +84,8 @@ func (s *Store) Update(i interface{}, t string) error {
 }
 
 // Deletes a record FROM THE table
-func (s *Store) Delete(i interface{}, t string) error {
-	result := s.DB.Table(t).Delete(i)
+func (s *Store) Delete(i interface{}, t string, primary ...interface{}) error {
+	result := s.DB.Table(t).Delete(i, primary...)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -94,8 +94,8 @@ func (s *Store) Delete(i interface{}, t string) error {
 }
 
 // Checks if there is a record
-func (s *Store) Contains(i interface{}, t string) error {
-	result := s.DB.Table(t).Model(i).First(i)
+func (s *Store) Contains(i interface{}, t string, primary ...interface{}) error {
+	result := s.DB.Table(t).Model(i).First(i, primary...)
 	if result.Error != nil {
 		return result.Error
 	}
