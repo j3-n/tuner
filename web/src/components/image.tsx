@@ -15,7 +15,7 @@ export const ImageComponent: React.FC<Props> = ({
     <div className={`w-${width} h-${height} relative`}>
       <img
         src={src}
-        className={`${rounded ? 'rounded-full' : ''}`}
+        className={`object-cover w-full h-full ${rounded ? 'rounded-full' : ''}`}
         width={width}
         height={height}
         alt="profile picture"

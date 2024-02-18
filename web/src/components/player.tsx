@@ -18,8 +18,8 @@ export const PlayerComponent: React.FC<Props> = ({
       {player.iconURL &&
         <ImageComponent
           src={player.iconURL}
-          width={100}
-          height={100}
+          width={50}
+          height={50}
           rounded={true}
         />}
       {children}
