@@ -99,14 +99,17 @@ function Page() {
     <div className="h-screen">
       <div className="text-center items-center pt-20">
         <h1 className="text-slate-100 text-8xl font-bold bg-slate-800 bg-opacity-75 py-5">Lobby: {lobby?.lobbyId}</h1>
-        <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
 
         {state === State.Waiting && lobby &&
-          <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
-            {lobby && lobby.players.map((player: Player, index: number) =>
-              <PlayerComponent key={index} player={player}></PlayerComponent>
-            )}
-          </div>}
+          <div>
+            <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
+            <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
+              {lobby && lobby.players.map((player: Player, index: number) =>
+                <PlayerComponent key={index} player={player}></PlayerComponent>
+              )}
+            </div>
+          </div>
+        }
 
         {state === State.Waiting &&
           <div className="fixed items-center w-1/2 bottom-0">
