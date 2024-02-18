@@ -82,6 +82,17 @@ function Page() {
   const onClickLeave = () => {
     getWebSocket()?.close()
     setState(State.Left)
+  };
+
+  const onClickAnswer = (id: string) => {
+    const message = {
+      "command": "GUESS",
+      "body": {
+        "answerId": id
+      }
+    }
+    sendJsonMessage(message);
+    setState(State.Answered)
   }
 
   return (
@@ -113,11 +124,15 @@ function Page() {
               purpleText={question.answers[1].song + " - " + question.answers[1].artist}
               greenText={question.answers[2].song + " - " + question.answers[2].artist}
               blueText={question.answers[3].song + " - " + question.answers[3].artist}
-              sendJsonMessage={sendJsonMessage}
+              onClick={onClickAnswer}
             >
             </GuessComponent>
             <SongComponent src={question.question} />
           </div>
+        }
+
+        {state === State.Answered &&
+          <div>waiting...</div>
         }
 
         {state === State.Result && result &&

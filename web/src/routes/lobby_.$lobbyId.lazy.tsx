@@ -75,6 +75,17 @@ function Page() {
     setState(State.Left)
   }
 
+  const onClickAnswer = (id: string) => {
+    const message = {
+      "command": "GUESS",
+      "body": {
+        "answerId": id
+      }
+    }
+    sendJsonMessage(message);
+    setState(State.Answered)
+  }
+
   return (
     <div className="max-h-screen">
       <div className="text-center items-center pt-20">
@@ -98,7 +109,7 @@ function Page() {
             purpleText={question.answers[1].song + " - " + question.answers[1].artist}
             greenText={question.answers[2].song + " - " + question.answers[2].artist}
             blueText={question.answers[3].song + " - " + question.answers[3].artist}
-            sendJsonMessage={sendJsonMessage}
+            onClick={onClickAnswer}
           >
           </GuessComponent>
         </div>
