@@ -20,14 +20,14 @@ export const AnswerComponent: React.FC<Props> = ({
       <ButtonComponent
         onClick={() => onClick("0")}
       >
-        <div className="h-20 rounded-xl bg-orange-500 flex items-center">
+        <div className="h-20 rounded-xl bg-red-500 flex items-center">
             <p className="mx-auto">{orangeText}</p>
         </div>
       </ButtonComponent>
       <ButtonComponent
         onClick={() => onClick("1")}
       >
-        <div className="h-20 rounded-xl bg-purple-500 flex items-center">
+        <div className="h-20 rounded-xl bg-yellow-500 flex items-center">
         <p className="mx-auto">{purpleText}</p>
         </div>
       </ButtonComponent>

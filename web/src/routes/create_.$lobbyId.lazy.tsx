@@ -106,11 +106,9 @@ function Page() {
         </span>
 
         {state === State.Waiting && lobby &&
-          <div className="pt-20 items-center w-1/2 grid grid-flow-col">
+          <div className="pt-20 items-center w-1/2 mx-auto grid grid-cols-5">
             {lobby && lobby.players.map((player: Player, index: number) =>
-              <div key={index}>
-                <PlayerComponent player={player}></PlayerComponent>
-              </div>
+              <PlayerComponent key={index} player={player}></PlayerComponent>
             )}
           </div>}
 

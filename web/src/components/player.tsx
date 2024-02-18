@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { H3Component } from "./heading";
 import { Player } from "../types/Player";
 import { ImageComponent } from "./image";
 
@@ -13,8 +12,8 @@ export const PlayerComponent: React.FC<Props> = ({
   children
 }): JSX.Element => {
   return (
-    <div>
-      <H3Component>{player.displayName}</H3Component>
+    <>
+    <div className="col-span-1">
       {player.iconURL &&
         <ImageComponent
           src={player.iconURL}
@@ -24,5 +23,9 @@ export const PlayerComponent: React.FC<Props> = ({
         />}
       {children}
     </div>
+    <div className="col-span-4">
+      <h3 className="text-5xl font-bold">{player.displayName}</h3>
+    </div>
+    </>
   );
 };
