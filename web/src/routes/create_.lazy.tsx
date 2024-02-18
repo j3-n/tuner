@@ -35,6 +35,12 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
+      console.log(event)
+
+      if (event.data === null || event === null || event.data === undefined || event === undefined || event.data === '0') {
+        return;
+      }
+
       try {
         const message = event.data;
         const command = JSON.parse(message);
@@ -134,7 +140,7 @@ function Page() {
           </div>
         }
 
-        {state === State.Answering && question &&
+        {state === State.Answering && question && question.answers &&
           <div>
             <AnswerComponent
               orangeText={question.answers[0].song + " - " + question.answers[0].artist}
