@@ -36,7 +36,7 @@ func (g GameState) String() string {
 
 type Packet struct {
 	Command string `json:"command"`
-	Body    []byte `json:"body"`
+	Body    string `json:"body"`
 }
 
 type Lobby struct {
@@ -80,7 +80,7 @@ func CreatePacket(command string, v any) []byte {
 	m, _ := json.Marshal(v)
 	ret, _ := json.Marshal(Packet{
 		Command: command,
-		Body:    m,
+		Body:    string(m),
 	})
 	return ret
 }
