@@ -2,7 +2,6 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
-import { H1Component } from '../components/heading';
 import { PlayerComponent } from '../components/player';
 import { Player } from '../types/Player';
 import { ButtonComponent } from '../components/button';
@@ -119,11 +118,15 @@ function Page() {
 
 
         {state === State.Waiting && lobby &&
-          <div className="mt-10 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
-            {lobby && lobby.players.map((player: Player, index: number) =>
-              <PlayerComponent key={index} player={player}></PlayerComponent>
-            )}
-          </div>}
+          <div>
+            <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
+            <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
+              {lobby && lobby.players.map((player: Player, index: number) =>
+                <PlayerComponent key={index} player={player}></PlayerComponent>
+              )}
+            </div>
+          </div>
+        }
 
 
         {state === State.Answering && question &&
@@ -136,8 +139,11 @@ function Page() {
               onClick={onClickAnswer}
             >
             </AnswerComponent>
-            <SongComponent src={question.question} />
           </div>
+        }
+
+        {(state === State.Answering || state === State.Answered) && question &&
+          <SongComponent src={question.question} />
         }
 
         {state === State.Answered &&
