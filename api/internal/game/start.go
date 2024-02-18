@@ -9,7 +9,7 @@ import (
 func StartRound(l *models.Lobby) {
 	// Generate quiz
 	if l.State == models.Waiting {
-		l.Questions = l.GenerateQuiz(10)
+		l.Questions = l.GenerateQuiz(5)
 		l.Points = map[string]int{}
 		l.State = models.Guessing
 		NewRound(l)
