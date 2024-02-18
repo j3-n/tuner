@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,7 +42,7 @@ func Auth(c *fiber.Ctx) error {
 
 	fmt.Printf("%s registered\n", s.String())
 
-	c.Redirect("http://localhost:5173")
+	c.Redirect(os.Getenv("REDIRECT_URL"))
 
 	return nil
 }
