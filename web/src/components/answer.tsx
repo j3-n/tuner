@@ -20,28 +20,28 @@ export const AnswerComponent: React.FC<Props> = ({
       <ButtonComponent
         onClick={() => onClick("0")}
       >
-        <div className="h-20 rounded-xl bg-red-500 flex items-center">
+        <div className="h-32 rounded-xl bg-red-500 flex items-center">
             <p className="mx-auto">{orangeText}</p>
         </div>
       </ButtonComponent>
       <ButtonComponent
         onClick={() => onClick("1")}
       >
-        <div className="h-20 rounded-xl bg-yellow-500 flex items-center">
+        <div className="h-32 rounded-xl bg-yellow-500 flex items-center">
         <p className="mx-auto">{purpleText}</p>
         </div>
       </ButtonComponent>
       <ButtonComponent
         onClick={() => onClick("2")}
       >
-        <div className="h-20 rounded-xl bg-green-500 flex items-center">
+        <div className="h-32 rounded-xl bg-green-500 flex items-center">
         <p className="mx-auto">{greenText}</p>
         </div>
       </ButtonComponent>
       <ButtonComponent
         onClick={() => onClick("3")}
       >
-        <div className="h-20 rounded-xl bg-blue-500 flex items-center">
+        <div className="h-32 rounded-xl bg-blue-500 flex items-center">
         <p className="mx-auto">{blueText}</p>
         </div>
       </ButtonComponent>
