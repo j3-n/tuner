@@ -49,5 +49,5 @@ func NextRound(l *models.Lobby) {
 }
 
 func GameOver(l *models.Lobby) {
-	l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), ""))
+	l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), l))
 }
