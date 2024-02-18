@@ -18,14 +18,8 @@ export const SongComponent: React.FC<Props> = ({
     }
   }
 
-  const onClick = () => {
-    play();
-  }
-
   return (
     <>
-      {src}
-      <button onClick={onClick}>In Case Of Emergency</button>
       <audio id="player" preload="false" autoPlay loop src={src} />
     </>
   );

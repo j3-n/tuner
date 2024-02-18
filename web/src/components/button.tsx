@@ -8,14 +8,14 @@ type Props = {
 
 export const ButtonComponent: React.FC<Props> = ({
   onClick,
-  color = "teal",
+  color = "",
   children
 }): JSX.Element => {
   return (
     <div>
-      <button className={`rounded-lg p-2 border-2 border-${color}-200 bg-${color}-100 hover:bg-${color}-200`} onClick={onClick}>
-        <div>
-        {children && children}
+      <button className={`rounded-lg w-full h-full p-2 bg-${color}-100 hover:bg-${color}-200`} onClick={onClick}>
+        <div className="w-full h-full text-slate-100 font-bold text-2xl">
+          {children && children}
         </div>
       </button>
     </div>
