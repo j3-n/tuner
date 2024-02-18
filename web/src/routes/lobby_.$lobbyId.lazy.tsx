@@ -18,17 +18,11 @@ export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
 });
 
-type Command = {
-  command: string;
-  body: string;
-};
-
 function Page() {
   const { lobbyId } = Route.useParams();
   const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/play/${lobbyId}`;
 
   const [state, setState] = useState<State>(State.Waiting);
-  const [command, setCommand] = useState<Command>();
   const [lobby, setLobby] = useState<Lobby>();
   const [question, setQuestion] = useState<Question>();
   const [result, setResult] = useState<Result>();
@@ -36,40 +30,34 @@ function Page() {
 
   const { getWebSocket } = useWebSocket(socketUrl, {
     onOpen: () => {
-      console.log("connected");
+      console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
       const message = event.data;
-      console.log(JSON.stringify(message));
-      try {
-        setCommand(JSON.parse(message));
-      } catch (error) {
-        console.log("error parsing json", error)
-      }
+      const command = JSON.parse(message);
 
-      if (command == null) {
-        return;
-      }
+      console.log(JSON.stringify(command));
 
       try {
-        switch (command.command) {
+        switch (command?.command) {
           case "WAITING":
-            // the defa(ult state
-            setLobby(JSON.parse(command.body));
+            // the default state
+            console.log(command.body)
+            setLobby(command.body as Lobby);
             break;
           case "QUESTION":
             // follows the default state, will alternate with result state till finished state
-            setQuestion(JSON.parse(command.body));
+            setQuestion(command.body as Question);
             setState(State.Answering);
             break;
           case "RESULT":
             // result state, shows the current user points
-            setResult(JSON.parse(command.body));
+            setResult(command.body as Result);
             setState(State.Result);
             break;
           case "FINISHED":
             // shows the end of game leaderboard
-            setLeaderboard(JSON.parse(command.body));
+            setLeaderboard(command.body as Leaderboard);
             setState(State.Finished);
             break;
         }
@@ -94,7 +82,6 @@ function Page() {
 
       {state === State.Waiting && lobby &&
         <div className="pt-20 items-center w-1/2 grid grid-flow-col">
-          {JSON.stringify(lobby)}
           {lobby.players.map((player: Player, index: number) =>
             <div key={index}>
               <PlayerComponent player={player}></PlayerComponent>
