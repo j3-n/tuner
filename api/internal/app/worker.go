@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/j3-n/tuner/api/internal/game"
@@ -17,7 +16,7 @@ type ClientData struct {
 }
 
 type GuessData struct {
-	AnswerId string `json:"answerId`
+	AnswerId string `json:"answerId"`
 }
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
@@ -41,19 +40,17 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 		} else if data.Optype == "GUESS" {
 			// Data will contain id of answer
 			// Store guess data into channel with data type map[player.uuid]answerIndex. Channel should be stored in Lobby
-			var guessData GuessData
-			c.ReadJSON(guessData)
-			answerInt, err := strconv.Atoi(guessData.AnswerId)
-			if err != nil {
-				fmt.Println("Error converting data from guess")
+			_, guessed := l.Guesses[p.UUID]
+			if l.State == models.Guessing && !guessed {
+				var guessData GuessData
+				c.ReadJSON(guessData)
+				answerInt, err := strconv.Atoi(guessData.AnswerId)
+				if err != nil {
+					fmt.Println("Error converting data from guess")
+				}
+				l.Guesses[p.UUID] = answerInt
+				// TODO: check if all players have submitted a guess
 			}
-			l.Guesses[p.UUID] = answerInt
-
-			// Data wilsl contain id of answer
-			// Send this data to nathans function which will evaluate it when round is over
-			// nathans function should wait till all people in lobby have given an answer
-			now := time.Now().Add(15 * time.Second)
-			game.WaitingGuesses(l, now)
 		}
 	}
 

@@ -27,7 +27,7 @@ func CreateLobby() int {
 		isUnique = !lobbies.Exists(fmt.Sprintf("%d", randomLobbyID))
 	}
 	lob := models.Lobby{LobbyId: fmt.Sprintf("%d", randomLobbyID), State: models.Waiting, Round: 0}
-	lob.CurrentQuestion = lob.GenerateQuiz(4)
+	lob.Questions = lob.GenerateQuiz(4)
 	lobbies.Add(&lob)
 	return randomLobbyID
 }

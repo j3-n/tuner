@@ -2,6 +2,7 @@ package models
 
 import (
 	"sync"
+	"time"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/zmb3/spotify/v2"
@@ -18,14 +19,15 @@ const (
 )
 
 type Lobby struct {
-	mu              sync.Mutex     `json:"-"`
-	Host            string         `json:"-"`
-	LobbyId         string         `json:"lobbyId"`
-	PlayerList      []*Player      `json:"players"`
-	State           GameState      `json:"-"`
-	Guesses         map[string]int `json:"-"` // Index
-	CurrentQuestion []Question     `json:"-"`
-	Round           int            `json:"-"`
+	mu         sync.Mutex     `json:"-"`
+	Host       string         `json:"-"`
+	LobbyId    string         `json:"lobbyId"`
+	PlayerList []*Player      `json:"players"`
+	State      GameState      `json:"-"`
+	Guesses    map[string]int `json:"-"` // Index
+	Questions  []Question     `json:"-"`
+	Round      int            `json:"-"`
+	Timer      *time.Timer    `json:"-"`
 }
 
 type User struct {

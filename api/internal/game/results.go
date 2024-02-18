@@ -11,7 +11,7 @@ func Results(l *models.Lobby) {
 	for _, player := range l.PlayerList {
 		index, ok := l.Guesses[player.UUID]
 		if ok {
-			if l.CurrentQuestion[l.Round].Correct == index {
+			if l.Questions[l.Round].Correct == index {
 
 			}
 		}

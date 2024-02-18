@@ -86,26 +86,3 @@ func (l *Lobby) GenerateQuizSongs(length int) ([]spotify.FullTrack, []spotify.Fu
 	})
 	return allSongs[:length], allSongs[length+1:]
 }
-
-var QuestionsSet = []Question{
-	{
-		Question: "Who is this artist",
-		Answers: []Answer{
-			{Artist: "Taylor Swift", Song: "hi", AnswerID: 1},
-			{Artist: "Ye", Song: "good monring", AnswerID: 2},
-			{Artist: "JayZ", Song: "heie", AnswerID: 3},
-			{Artist: "SZA", Song: "Ddsds", AnswerID: 4},
-		},
-		Correct: 1,
-	},
-	{
-		Question: "What is this song",
-		Answers: []Answer{
-			{Artist: "Taylor Swift", Song: "hi", AnswerID: 1},
-			{Artist: "Ye", Song: "good monring", AnswerID: 2},
-			{Artist: "JayZ", Song: "heie", AnswerID: 3},
-			{Artist: "SZA", Song: "Ddsds", AnswerID: 4},
-		},
-		Correct: 2,
-	},
-}
