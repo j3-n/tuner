@@ -22,7 +22,6 @@ const CreateLazyImport = createFileRoute('/create')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 const LobbyLobbyIdLazyImport = createFileRoute('/lobby/$lobbyId')()
-const CreateLobbyIdLazyImport = createFileRoute('/create/$lobbyId')()
 
 // Create/Update Routes
 
@@ -34,7 +33,7 @@ const LobbyLazyRoute = LobbyLazyImport.update({
 const CreateLazyRoute = CreateLazyImport.update({
   path: '/create',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/create.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/create_.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -56,13 +55,6 @@ const LobbyLobbyIdLazyRoute = LobbyLobbyIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/lobby_.$lobbyId.lazy').then((d) => d.Route),
-)
-
-const CreateLobbyIdLazyRoute = CreateLobbyIdLazyImport.update({
-  path: '/create/$lobbyId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/create_.$lobbyId.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -89,10 +81,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LobbyLazyImport
       parentRoute: typeof rootRoute
     }
-    '/create/$lobbyId': {
-      preLoaderRoute: typeof CreateLobbyIdLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/lobby/$lobbyId': {
       preLoaderRoute: typeof LobbyLobbyIdLazyImport
       parentRoute: typeof rootRoute
@@ -108,7 +96,6 @@ export const routeTree = rootRoute.addChildren([
   AboutLazyRoute,
   CreateLazyRoute,
   LobbyLazyRoute,
-  CreateLobbyIdLazyRoute,
   LobbyLobbyIdLazyRoute,
 ])
 

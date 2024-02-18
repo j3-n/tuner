@@ -17,12 +17,11 @@ import { SongComponent } from '../components/song';
 import { BackgroundComponent } from '../components/background';
 import QRCode from 'react-qr-code';
 
-export const Route = createLazyFileRoute('/create/$lobbyId')({
+export const Route = createLazyFileRoute('/create')({
   component: Page
 });
 
 function Page() {
-  const { lobbyId } = Route.useParams();
   const socketUrl = `ws://${import.meta.env.VITE_HOST_ADDRESS}/create`;
 
   const [state, setState] = useState<State>(State.Waiting);
@@ -101,7 +100,7 @@ function Page() {
     <div className="h-screen">
       <div className="text-center items-center pt-20">
         <span className="inline-flex">
-        <H1Component>lobby {lobbyId}</H1Component>
+        <H1Component>lobby {lobby?.lobbyId}</H1Component>
         <QRCode value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
         </span>
 
