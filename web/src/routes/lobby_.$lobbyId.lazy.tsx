@@ -38,7 +38,7 @@ function Page() {
     onMessage: (event: WebSocketEventMap['message']) => {
       console.log(event)
 
-      if (event.data == null || event == null || event.data == undefined || event == undefined || event.data === '0') {
+      if (event.data === null || event === null || event.data === undefined || event === undefined || event.data === '0') {
         return;
       }
 
