@@ -77,6 +77,16 @@ type Player struct {
 	Conn        *websocket.Conn `json:"-"`
 }
 
+type Leaderboard struct {
+	Scores []ScoreEntry `json:"scores"`
+}
+
+type ScoreEntry struct {
+	PlayerName string `json:"playerName"`
+	IconURL    string `json:"iconURL"`
+	Score      int    `json:"score"`
+}
+
 func CreatePacket(command string, v any) []byte {
 	ret, err := json.Marshal(Packet{
 		Command: command,
@@ -88,6 +98,24 @@ func CreatePacket(command string, v any) []byte {
 	}
 
 	return ret
+}
+
+func (l *Lobby) CreateLeaderboard() Leaderboard {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	ret := []ScoreEntry{}
+
+	for _, p := range l.PlayerList {
+		ret = append(ret, ScoreEntry{
+			PlayerName: p.DisplayName,
+			IconURL:    p.IconURL,
+			Score:      l.Points[p.UUID],
+		})
+	}
+	return Leaderboard{
+		Scores: ret,
+	}
 }
 
 func (l *Lobby) AddPlayer(p *Player) {
