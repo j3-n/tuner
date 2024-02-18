@@ -11,18 +11,45 @@ func StartRound(l *models.Lobby) {
 	// Generate quiz
 	if l.State == models.Waiting {
 		l.Questions = l.GenerateQuiz(10)
+		l.Points = map[string]int{}
 		l.State = models.Guessing
-		// Broadcast question
-		m, _ := json.Marshal(l.Questions[0])
-		l.BroadcastToAllPlayers(m)
-		l.Guesses = map[string]int{}
-		// Start timer for question deadline
-		l.Timer = time.AfterFunc(time.Second*15, func() {
-			EndRound(l)
-		})
+		NewRound(l)
 	}
 }
 
-func EndRound(l *models.Lobby) {
+func NewRound(l *models.Lobby) {
+	// Broadcast question
+	m, _ := json.Marshal(l.Questions[0])
+	l.BroadcastToAllPlayers(m)
+	l.Guesses = map[string]int{}
+	// Start timer for question deadline
+	l.Timer = time.AfterFunc(time.Second*15, func() {
+		EndRound(l)
+	})
+}
 
+func EndRound(l *models.Lobby) {
+	l.State = models.Results
+	Results(l)
+	// Next round after 5 seconds
+	time.AfterFunc(time.Second*5, func() {
+		NextRound(l)
+	})
+}
+
+func NextRound(l *models.Lobby) {
+	l.Round += 1
+	if l.Round >= len(l.Questions) {
+		l.State = models.Finish
+		// Game over
+		GameOver(l)
+	} else {
+		l.State = models.Guessing
+		// Next round
+		NewRound(l)
+	}
+}
+
+func GameOver(l *models.Lobby) {
+	l.BroadcastToAllPlayers([]byte("GAMEOVER"))
 }
