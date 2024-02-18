@@ -30,7 +30,7 @@ function Page() {
           </div>
         </div>
         <div className="bg-green-600 rounded-xl">
-          <LinkComponent to='http://localhost:4444/login' size='lg'>
+          <LinkComponent to={`http://${import.meta.env.VITE_HOST_ADDRESS}/login`} size='lg'>
             <p className="text-6xl">
               Login with Spotify
             </p>

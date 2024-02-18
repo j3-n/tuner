@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/redirect"
+	"github.com/j3-n/tuner/api/internal/handlers"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 )
 
@@ -64,6 +65,8 @@ func (a *App) Run() {
 	}))
 
 	a.Fiber.Get("/auth", Auth)
+
+	a.Fiber.Get("/api/v1/health", handlers.GetHealth())
 
 	log.Fatal(a.Fiber.Listen(":4444"))
 }
