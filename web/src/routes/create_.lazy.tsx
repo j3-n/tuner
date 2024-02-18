@@ -106,7 +106,6 @@ function Page() {
             </center>
           </div>
         }
-        <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
 
         {state === State.Waiting &&
           <div className="mx-auto items-center w-1/4 mt-10">
