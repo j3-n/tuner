@@ -1,8 +1,6 @@
 package game
 
 import (
-	"encoding/json"
-
 	"github.com/j3-n/tuner/api/internal/models"
 )
 
@@ -23,7 +21,5 @@ func Results(l *models.Lobby) {
 	}
 
 	// Broadcast scores
-	d, _ := json.Marshal(l)
-	l.BroadcastToAllPlayers([]byte("OVER"))
-	l.BroadcastToAllPlayers(d)
+	l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), l))
 }

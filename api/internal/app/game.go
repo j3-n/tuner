@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -76,8 +75,7 @@ func JoinLobby(c *websocket.Conn, lobby string) {
 	fmt.Printf("%s is joining lobby %s\n", p.DisplayName, lobby)
 	// Send lobby information as JSON to all connected players
 	lo := lobbies.Get(lobby)
-	l, _ := json.Marshal(lo)
-	lo.BroadcastToAllPlayers(l)
+	lo.BroadcastToAllPlayers(models.CreatePacket(lo.State.String(), lo))
 	// Send to running worker
 	PlayerWorker(c, p, lo)
 }

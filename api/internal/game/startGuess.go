@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/j3-n/tuner/api/internal/models"
@@ -19,8 +18,7 @@ func StartRound(l *models.Lobby) {
 
 func NewRound(l *models.Lobby) {
 	// Broadcast question
-	m, _ := json.Marshal(l.Questions[l.Round])
-	l.BroadcastToAllPlayers(m)
+	l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), l.Questions[l.Round]))
 	l.Guesses = map[string]int{}
 	// Start timer for question deadline
 	l.Timer = time.AfterFunc(time.Second*15, func() {
@@ -51,5 +49,5 @@ func NextRound(l *models.Lobby) {
 }
 
 func GameOver(l *models.Lobby) {
-	l.BroadcastToAllPlayers([]byte("GAMEOVER"))
+	l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), ""))
 }

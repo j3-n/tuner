@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -60,7 +59,6 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 		lobbies.RemoveLobby(l)
 	} else {
 		// Rebroadcast lobby
-		data, _ := json.Marshal(l)
-		l.BroadcastToAllPlayers(data)
+		l.BroadcastToAllPlayers(models.CreatePacket(l.State.String(), l))
 	}
 }
