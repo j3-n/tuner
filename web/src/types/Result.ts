@@ -1,5 +1,7 @@
 import { Player } from "./Player";
 
 export type Result = {
-  players: Player[];
+  lobby: string,
+  players: Player[],
+  points: Record<string, number>,
 };

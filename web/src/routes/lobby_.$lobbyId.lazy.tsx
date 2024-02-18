@@ -25,6 +25,7 @@ function Page() {
   const [state, setState] = useState<State>(State.Waiting);
   const [lobby, setLobby] = useState<Lobby>();
   const [question, setQuestion] = useState<Question>();
+  const [answer, setAnswer] = useState<string>("-1");
   const [result, setResult] = useState<Result>();
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
 
@@ -49,6 +50,7 @@ function Page() {
             // follows the default state, will alternate with result state till finished state
             setQuestion(command.body as Question);
             setState(State.Answering);
+            setAnswer("-1");
             break;
           case "RESULT":
             // result state, shows the current user points
@@ -83,7 +85,8 @@ function Page() {
       }
     }
     sendJsonMessage(message);
-    setState(State.Answered)
+    setState(State.Answered);
+    setAnswer(id);
   }
 
   return (
@@ -115,11 +118,13 @@ function Page() {
         </div>
       }
 
-      {state === State.Result && result &&
+      {state === State.Result && question && result &&
         <div>
-          <ResultComponent
-            result={result}
-          >
+            <ResultComponent
+              question={question}
+              result={result}
+              answer={answer}
+            >
           </ResultComponent>
         </div>
       }

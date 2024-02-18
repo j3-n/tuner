@@ -26,6 +26,7 @@ function Page() {
   const [state, setState] = useState<State>(State.Waiting);
   const [lobby, setLobby] = useState<Lobby>();
   const [question, setQuestion] = useState<Question>();
+  const [answer, setAnswer] = useState<string>("-1");
   const [result, setResult] = useState<Result>();
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
 
@@ -92,7 +93,8 @@ function Page() {
       }
     }
     sendJsonMessage(message);
-    setState(State.Answered)
+    setState(State.Answered);
+    setAnswer(id)
   }
 
   return (
@@ -149,9 +151,11 @@ function Page() {
           <p className="mx-auto m-5 text-3xl text-slate-100 font-bold">You're In! Think you got it right?</p>
         }
 
-        {state === State.Result && result &&
+        {state === State.Result && question && result &&
           <div>
             <ResultComponent
+              question={question}
+              answer={answer}
               result={result}
             >
             </ResultComponent>
