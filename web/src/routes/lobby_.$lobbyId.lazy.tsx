@@ -7,7 +7,7 @@ import { Lobby } from '../types/Lobby';
 import { Player } from '../types/Player';
 import { ButtonComponent } from '../components/button';
 import { State } from '../lib/State';
-import { GuessComponent } from '../components/guess';
+import { AnswerComponent } from '../components/answer';
 import { Question } from '../types/Question';
 import { Leaderboard } from '../types/Leaderboard';
 import { Result } from '../types/Result';
@@ -104,14 +104,14 @@ function Page() {
 
       {state === State.Answering && question &&
         <div>
-          <GuessComponent
+          <AnswerComponent
             orangeText={question.answers[0].song + " - " + question.answers[0].artist}
             purpleText={question.answers[1].song + " - " + question.answers[1].artist}
             greenText={question.answers[2].song + " - " + question.answers[2].artist}
             blueText={question.answers[3].song + " - " + question.answers[3].artist}
             onClick={onClickAnswer}
           >
-          </GuessComponent>
+          </AnswerComponent>
         </div>
       }
 

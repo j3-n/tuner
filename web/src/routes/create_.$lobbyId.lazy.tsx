@@ -10,10 +10,11 @@ import { State } from '../lib/State';
 import { Question } from '../types/Question';
 import { Result } from '../types/Result';
 import { Leaderboard } from '../types/Leaderboard';
-import { GuessComponent } from '../components/guess';
+import { AnswerComponent } from '../components/answer';
 import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
 import { SongComponent } from '../components/song';
+import { BackgroundComponent } from '../components/background';
 
 export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
@@ -97,7 +98,7 @@ function Page() {
 
   return (
     <div className="h-screen">
-      <div className="text-center items-center">
+      <div className="text-center items-center pt-20">
         <H1Component>lobby {lobbyId}</H1Component>
 
         {state === State.Waiting && lobby &&
@@ -119,14 +120,14 @@ function Page() {
 
         {state === State.Answering && question &&
           <div>
-            <GuessComponent
+            <AnswerComponent
               orangeText={question.answers[0].song + " - " + question.answers[0].artist}
               purpleText={question.answers[1].song + " - " + question.answers[1].artist}
               greenText={question.answers[2].song + " - " + question.answers[2].artist}
               blueText={question.answers[3].song + " - " + question.answers[3].artist}
               onClick={onClickAnswer}
             >
-            </GuessComponent>
+            </AnswerComponent>
             <SongComponent src={question.question} />
           </div>
         }
@@ -159,6 +160,10 @@ function Page() {
               <ButtonComponent onClick={onClickLeave}>Leave!</ButtonComponent>
             </center>
           </div>
+        }
+
+        {lobby &&
+          <BackgroundComponent images={lobby.players[0].carousel}></BackgroundComponent>
         }
       </div>
     </div>
