@@ -91,11 +91,19 @@ func CreatePlayer(c *websocket.Conn, uuid string) *models.Player {
 		return nil
 	}
 
+	imgs := u.Images
+	var img string
+	if len(imgs) == 0 {
+		img = ""
+	} else {
+		img = imgs[0].URL
+	}
+
 	return &models.Player{
 		User:        users.Get(uuid),
 		Client:      client,
 		DisplayName: u.DisplayName,
-		IconURL:     u.Images[0].URL,
+		IconURL:     img,
 		Carousel:    GenerateCarousel(client),
 		Conn:        c,
 	}
