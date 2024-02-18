@@ -47,9 +47,11 @@ function Page() {
 
         console.log(JSON.stringify(command));
 
-
         switch (command?.command) {
           case "WAITING":
+            if (state != State.Waiting) {
+              return;
+            }
             // the default state
             console.log(command.body)
             setLobby(command.body as Lobby);
