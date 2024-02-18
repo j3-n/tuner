@@ -35,12 +35,12 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
-      const message = event.data;
-      const command = JSON.parse(message);
-
-      console.log(JSON.stringify(command));
-
       try {
+        const message = event.data;
+        const command = JSON.parse(message);
+
+        console.log(JSON.stringify(command));
+
         switch (command?.command) {
           case "WAITING":
             // the default state
