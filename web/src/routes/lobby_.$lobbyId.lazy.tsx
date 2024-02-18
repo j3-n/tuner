@@ -36,12 +36,6 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
-      console.log(event)
-
-      if (event.data === null || event === null || event.data === undefined || event === undefined || event.data === '0') {
-        return;
-      }
-
       try {
         const message = event.data;
         const command = JSON.parse(message);
@@ -50,9 +44,6 @@ function Page() {
 
         switch (command?.command) {
           case "WAITING":
-            if (state != State.Waiting) {
-              return;
-            }
             // the default state
             console.log(command.body)
             setLobby(command.body as Lobby);
