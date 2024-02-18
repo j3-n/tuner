@@ -2,7 +2,6 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { Lobby } from '../types/Lobby';
-import { H1Component } from '../components/heading';
 import { PlayerComponent } from '../components/player';
 import { Player } from '../types/Player';
 import { ButtonComponent } from '../components/button';
@@ -127,8 +126,11 @@ function Page() {
               onClick={onClickAnswer}
             >
             </AnswerComponent>
-            <SongComponent src={question.question} />
           </div>
+        }
+
+        {(state === State.Answering || state === State.Answered) && question &&
+          <SongComponent src={question.question} />
         }
 
         {state === State.Answered &&
