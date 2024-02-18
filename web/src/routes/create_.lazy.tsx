@@ -51,6 +51,7 @@ function Page() {
             // follows the default state, will alternate with result state till finished state
             setQuestion(command.body as Question);
             setState(State.Answering);
+            setAnswer("-1");
             break;
           case "RESULT":
             // result state, shows the current user points

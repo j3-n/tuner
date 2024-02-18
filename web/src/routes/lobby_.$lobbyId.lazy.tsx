@@ -14,6 +14,7 @@ import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
 import { BackgroundComponent } from '../components/background';
 import QRCode from 'react-qr-code';
+import { SongComponent } from '../components/song';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
@@ -113,29 +114,37 @@ function Page() {
           </div>
         }
 
-      {state === State.Answering && question &&
-        <div>
-          <AnswerComponent
-            orangeText={question.answers[0].song + " - " + question.answers[0].artist}
-            purpleText={question.answers[1].song + " - " + question.answers[1].artist}
-            greenText={question.answers[2].song + " - " + question.answers[2].artist}
-            blueText={question.answers[3].song + " - " + question.answers[3].artist}
-            onClick={onClickAnswer}
-          >
-          </AnswerComponent>
-        </div>
-      }
+        {state === State.Answering && question &&
+          <div>
+            <AnswerComponent
+              orangeText={question.answers[0].song + " - " + question.answers[0].artist}
+              purpleText={question.answers[1].song + " - " + question.answers[1].artist}
+              greenText={question.answers[2].song + " - " + question.answers[2].artist}
+              blueText={question.answers[3].song + " - " + question.answers[3].artist}
+              onClick={onClickAnswer}
+            >
+            </AnswerComponent>
+          </div>
+        }
 
-      {state === State.Result && question && result &&
-        <div>
+        {(state === State.Answering || state === State.Answered) && question &&
+          <SongComponent src={question.question} />
+        }
+
+        {state === State.Answered &&
+          <p className="mx-auto m-5 text-3xl text-slate-100 font-bold">You're In! Think you got it right?</p>
+        }
+
+        {state === State.Result && question && result &&
+          <div>
             <ResultComponent
               question={question}
-              result={result}
               answer={answer}
+              result={result}
             >
-          </ResultComponent>
-        </div>
-      }
+            </ResultComponent>
+          </div>
+        }
 
         {state === State.Finished && leaderboard &&
           <div>
