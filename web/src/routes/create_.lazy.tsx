@@ -104,9 +104,9 @@ function Page() {
       <div className="text-center items-center pt-20">
         <h1 className="text-slate-100 text-8xl font-bold bg-slate-800 bg-opacity-75 py-5">Lobby: {lobby?.lobbyId}</h1>
         {state != State.Waiting &&
-          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl mt-5 p-1">
+          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl text-slate-100 text-3xl mt-5 p-1">
             <center>
-              <LinkComponent to="/" onClick={onClickLeave}>Leave Game</LinkComponent>
+              <LinkComponent to="/" onClick={onClickLeave} size='lg'>Leave Game</LinkComponent>
             </center>
           </div>
         }
