@@ -13,7 +13,7 @@ export const PlayerComponent: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <>
-    <div className="col-span-1">
+    <div className="col-span">
       {player.iconURL &&
         <ImageComponent
           src={player.iconURL}
@@ -23,7 +23,7 @@ export const PlayerComponent: React.FC<Props> = ({
         />}
       {children}
     </div>
-    <div className="col-span-4">
+    <div className="col-span-4 text-slate-100">
       <h3 className="text-5xl font-bold">{player.displayName}</h3>
     </div>
     </>
