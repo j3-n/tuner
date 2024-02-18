@@ -13,7 +13,7 @@ function Page() {
     <>
       <hr />
       <Outlet />
-      <TanStackRouterDevtools />
+      {!import.meta.env.PROD && <TanStackRouterDevtools />}
     </>
   );
 }
