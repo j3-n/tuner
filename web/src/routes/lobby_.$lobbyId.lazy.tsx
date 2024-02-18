@@ -141,7 +141,7 @@ function Page() {
           <p className="mx-auto m-5 text-3xl text-slate-100 font-bold">You're In! Think you got it right?</p>
         }
 
-        {state === State.Result && question && result &&
+        {state === State.Result && question && result && result.points &&
           <div>
             <ResultComponent
               question={question}
