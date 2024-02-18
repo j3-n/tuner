@@ -1,6 +1,10 @@
 package models
 
 type Competitor struct {
-	Id    string `json:"playerId"`
-	Score int    `json:"socre"`
+	Id    int `gorm:"primaryKey" json:"id"`
+	Score int `gorm:"not null" json:"score"`
 }
+
+// type LeaderBoard struct {
+// 	Comp []Competitor
+// }

@@ -8,7 +8,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/redirect"
+	"github.com/j3-n/tuner/api/internal/database"
 	"github.com/j3-n/tuner/api/internal/handlers"
+	"github.com/j3-n/tuner/api/internal/models"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 )
 
@@ -24,6 +26,7 @@ type Config struct {
 
 type App struct {
 	Config Config
+	Store  *database.Store
 	Fiber  *fiber.App
 }
 
@@ -35,7 +38,7 @@ func New(args ...Config) App {
 	}
 
 	f := fiber.New()
-
+	s := database.New()
 	if len(args) > 0 {
 		c = args[0]
 	}
@@ -43,6 +46,7 @@ func New(args ...Config) App {
 	return App{
 		Config: c,
 		Fiber:  f,
+		Store:  s,
 	}
 }
 
@@ -54,7 +58,13 @@ func (a *App) Run() {
 		},
 	}))
 
+	a.Store.AutoMigrate(models.Competitor{})
+
 	a.Fiber.Get("/create", websocket.New(HandleCreationRequest))
+
+	a.Fiber.Get("/api/v1/player", handlers.ListPlayers(a.Store))
+	a.Fiber.Get("/api/v1/player/:id", handlers.GetPlayer(a.Store))
+	a.Fiber.Post("/api/v1/player", handlers.PostPlayer(a.Store))
 
 	a.Fiber.Get("/play/:lobby", websocket.New(HandleAddPlayerRequest))
 
