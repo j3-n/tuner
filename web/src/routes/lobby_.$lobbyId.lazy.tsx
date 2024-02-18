@@ -1,5 +1,4 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { H1Component } from '../components/heading';
 import { PlayerComponent } from '../components/player';
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
@@ -13,6 +12,9 @@ import { Leaderboard } from '../types/Leaderboard';
 import { Result } from '../types/Result';
 import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
+import { BackgroundComponent } from '../components/background';
+import { SongComponent } from '../components/song';
+import QRCode from 'react-qr-code';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
   component: Page
@@ -73,7 +75,7 @@ function Page() {
   const onClickLeave = () => {
     getWebSocket()?.close()
     setState(State.Left)
-  }
+  };
 
   const onClickAnswer = (id: string) => {
     const message = {
@@ -87,56 +89,70 @@ function Page() {
   }
 
   return (
-    <div className="max-h-screen">
+    <div className="h-screen">
       <div className="text-center items-center pt-20">
-        <H1Component>lobby {lobbyId}</H1Component>
-      </div>
+        <h1 className="text-slate-100 text-8xl font-bold bg-slate-800 bg-opacity-75 py-5">Lobby: {lobby?.lobbyId}</h1>
+        {state != State.Waiting &&
+          <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl mt-5 p-1">
+            <center>
+              <ButtonComponent onClick={onClickLeave}>Leave Game</ButtonComponent>
+            </center>
+          </div>
+        }
 
-      {state === State.Waiting && lobby &&
-        <div className="pt-20 items-center w-1/2 grid grid-flow-col">
-          {lobby.players.map((player: Player, index: number) =>
-            <div key={index}>
-              <PlayerComponent player={player}></PlayerComponent>
+        {state === State.Waiting && lobby &&
+          <div>
+            <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
+            <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
+              {lobby && lobby.players.map((player: Player, index: number) =>
+                <PlayerComponent key={index} player={player}></PlayerComponent>
+              )}
             </div>
-          )}
-        </div>}
+          </div>
+        }
 
+        {state === State.Answering && question &&
+          <div>
+            <AnswerComponent
+              orangeText={question.answers[0].song + " - " + question.answers[0].artist}
+              purpleText={question.answers[1].song + " - " + question.answers[1].artist}
+              greenText={question.answers[2].song + " - " + question.answers[2].artist}
+              blueText={question.answers[3].song + " - " + question.answers[3].artist}
+              onClick={onClickAnswer}
+            >
+            </AnswerComponent>
+          </div>
+        }
 
-      {state === State.Answering && question &&
-        <div>
-          <AnswerComponent
-            orangeText={question.answers[0].song + " - " + question.answers[0].artist}
-            purpleText={question.answers[1].song + " - " + question.answers[1].artist}
-            greenText={question.answers[2].song + " - " + question.answers[2].artist}
-            blueText={question.answers[3].song + " - " + question.answers[3].artist}
-            onClick={onClickAnswer}
-          >
-          </AnswerComponent>
-        </div>
-      }
+        {(state === State.Answering || state === State.Answered) && question &&
+          <SongComponent src={question.question} />
+        }
 
-      {state === State.Result && result &&
-        <div>
-          <ResultComponent
-            result={result}
-          >
-          </ResultComponent>
-        </div>
-      }
+        {state === State.Answered &&
+          <p className="mx-auto m-5 text-3xl text-slate-100 font-bold">You're In! Think you got it right?</p>
+        }
 
-      {state === State.Finished && leaderboard &&
-        <div>
-          <LeaderboardComponent
-            leaderboard={leaderboard}
-          >
-          </LeaderboardComponent>
-        </div>
-      }
+        {state === State.Result && result &&
+          <div>
+            <ResultComponent
+              result={result}
+            >
+            </ResultComponent>
+          </div>
+        }
 
-      <div className="fixed items-center w-1/2 bottom-0">
-        <center>
-          <ButtonComponent onClick={onClickLeave}>Leave!</ButtonComponent>
-        </center>
+        {state === State.Finished && leaderboard &&
+          <div>
+            <LeaderboardComponent
+              leaderboard={leaderboard}
+            >
+            </LeaderboardComponent>
+          </div>
+        }
+
+        {lobby &&
+          <BackgroundComponent images={lobby.players[0].carousel}></BackgroundComponent>
+        }
       </div>
     </div>
   );
