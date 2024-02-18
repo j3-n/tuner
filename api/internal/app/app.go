@@ -62,7 +62,9 @@ func (a *App) Run() {
 
 	a.Fiber.Get("/create", websocket.New(HandleCreationRequest))
 
-	a.Fiber.Get("/api/v1/getPlayers", handlers.GetPlayers(a.Store))
+	a.Fiber.Get("/api/v1/player", handlers.ListPlayers(a.Store))
+	a.Fiber.Get("/api/v1/player/:id", handlers.GetPlayer(a.Store))
+	a.Fiber.Post("/api/v1/player", handlers.PostPlayer(a.Store))
 
 	a.Fiber.Get("/play/:lobby", websocket.New(HandleAddPlayerRequest))
 
