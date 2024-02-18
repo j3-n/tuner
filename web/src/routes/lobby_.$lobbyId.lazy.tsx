@@ -36,6 +36,8 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
+      console.log(event)
+
       if (event.data == null || event == null || event.data == undefined || event == undefined) {
         return;
       }
