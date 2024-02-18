@@ -26,7 +26,7 @@ export const SongComponent: React.FC<Props> = ({
     <>
       {src}
       <button onClick={onClick}>In Case Of Emergency</button>
-      <audio id="player" preload="false" autoPlay loop src="https://p.scdn.co/mp3-preview/cea8b314f8b3777c6b87a45187b7b522d3911fde?cid=79ca1b48bc314222a4699a62a130764c" />
+      <audio id="player" preload="false" autoPlay loop src={src} />
     </>
   );
 };

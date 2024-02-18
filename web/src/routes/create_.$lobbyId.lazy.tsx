@@ -13,6 +13,7 @@ import { Leaderboard } from '../types/Leaderboard';
 import { GuessComponent } from '../components/guess';
 import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
+import { SongComponent } from '../components/song';
 
 export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
@@ -28,7 +29,7 @@ function Page() {
   const [result, setResult] = useState<Result>();
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
 
-  const { sendJsonMessage } = useWebSocket(socketUrl, {
+  const { sendJsonMessage, getWebSocket } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected")
     },
@@ -78,8 +79,13 @@ function Page() {
     sendJsonMessage(message);
   };
 
+  const onClickLeave = () => {
+    getWebSocket()?.close()
+    setState(State.Left)
+  }
+
   return (
-    <div className="max-h-screen">
+    <div className="h-screen">
       <div className="text-center items-center">
         <H1Component>lobby {lobbyId}</H1Component>
 
@@ -92,12 +98,25 @@ function Page() {
             )}
           </div>}
 
+        {state === State.Waiting &&
+          <div className="fixed items-center w-1/2 bottom-0">
+            <center>
+              <ButtonComponent onClick={onClickPlay}>Play!</ButtonComponent>
+            </center>
+          </div>
+        }
+
         {state === State.Answering && question &&
           <div>
             <GuessComponent
-              text='yo'
+              orangeText={question.answers[0].song + " - " + question.answers[0].artist}
+              purpleText={question.answers[1].song + " - " + question.answers[1].artist}
+              greenText={question.answers[2].song + " - " + question.answers[2].artist}
+              blueText={question.answers[3].song + " - " + question.answers[3].artist}
+              sendJsonMessage={sendJsonMessage}
             >
             </GuessComponent>
+            <SongComponent src={question.question} />
           </div>
         }
 
@@ -119,11 +138,13 @@ function Page() {
           </div>
         }
 
-        <div className="fixed items-center w-1/2 bottom-0">
-          <center>
-            <ButtonComponent onClick={onClickPlay}>Play!</ButtonComponent>
-          </center>
-        </div>
+        {state != State.Waiting &&
+          <div className="fixed items-center w-1/2 bottom-0">
+            <center>
+              <ButtonComponent onClick={onClickLeave}>Leave!</ButtonComponent>
+            </center>
+          </div>
+        }
       </div>
     </div>
   );

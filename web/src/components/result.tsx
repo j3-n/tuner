@@ -4,8 +4,8 @@ type Props = {
   result: Result;
 };
 
-export const ResultComponent: React.FC<Props> = (): JSX.Element => {
+export const ResultComponent: React.FC<Props> = ({ result }): JSX.Element => {
   return (
-    <></>
+    <>{JSON.stringify(result)}</>
   );
 };

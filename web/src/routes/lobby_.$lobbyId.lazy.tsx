@@ -28,7 +28,7 @@ function Page() {
   const [result, setResult] = useState<Result>();
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
 
-  const { getWebSocket } = useWebSocket(socketUrl, {
+  const { sendJsonMessage, getWebSocket } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected")
     },
@@ -72,6 +72,7 @@ function Page() {
 
   const onClickLeave = () => {
     getWebSocket()?.close()
+    setState(State.Left)
   }
 
   return (
@@ -93,7 +94,11 @@ function Page() {
       {state === State.Answering && question &&
         <div>
           <GuessComponent
-            text='yo'
+            orangeText={question.answers[0].song + " - " + question.answers[0].artist}
+            purpleText={question.answers[1].song + " - " + question.answers[1].artist}
+            greenText={question.answers[2].song + " - " + question.answers[2].artist}
+            blueText={question.answers[3].song + " - " + question.answers[3].artist}
+            sendJsonMessage={sendJsonMessage}
           >
           </GuessComponent>
         </div>

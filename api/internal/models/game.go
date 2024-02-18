@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -139,6 +140,7 @@ func (l *Lobbies) RemoveLobby(lo *Lobby) {
 func (l *Lobby) BroadcastToAllPlayers(m []byte) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
+	fmt.Println(string(m))
 
 	for _, p := range l.PlayerList {
 		p.Conn.WriteMessage(websocket.TextMessage, m)

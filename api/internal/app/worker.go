@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/gofiber/contrib/websocket"
@@ -11,7 +12,7 @@ import (
 
 type ClientData struct {
 	Optype string `json:"command"` // Contains type of operation - GAME START, GUESS ANSWER ETC
-	Data   string `json:"body"`    // Contains data relating to option above
+	Data   any    `json:"body"`    // Contains data relating to option above
 }
 
 type GuessData struct {
@@ -20,10 +21,10 @@ type GuessData struct {
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	// Continuously poll for messages from the client
-
 	for {
 		var data ClientData
 		err := c.ReadJSON(&data)
+		fmt.Println(data)
 		if err != nil {
 			// Player disconnect
 			fmt.Printf("%s has disconnected from lobby %s\n", p.DisplayName, l.LobbyId)
@@ -41,11 +42,22 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 			// Store guess data into channel with data type map[player.uuid]answerIndex. Channel should be stored in Lobby
 			_, guessed := l.Guesses[p.UUID]
 			if l.State == models.Guessing && !guessed {
-				var guessData GuessData
-				c.ReadJSON(guessData)
-				answerInt, err := strconv.Atoi(guessData.AnswerId)
+
+				valMap, ok := data.Data.(map[string]any)
+				if !ok {
+					log.Println("Error occurred")
+				}
+				val, ok := valMap["answerId"]
+				if !ok {
+					log.Println("Error occurred")
+				}
+				valStr, ok := val.(string)
+				if !ok {
+					log.Println("Error occurred")
+				}
+				answerInt, err := strconv.Atoi(valStr)
 				if err != nil {
-					fmt.Println("Error converting data from guess")
+					log.Println("Error converting data from guess,", err)
 				}
 				l.Guesses[p.UUID] = answerInt
 				// TODO: check if all players have submitted a guess

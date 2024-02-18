@@ -3,4 +3,5 @@ export enum State {
   Answering,
   Result,
   Finished,
+  Left,
 }
