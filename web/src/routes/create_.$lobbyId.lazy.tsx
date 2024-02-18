@@ -15,6 +15,7 @@ import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
 import { SongComponent } from '../components/song';
 import { BackgroundComponent } from '../components/background';
+import QRCode from 'react-qr-code';
 
 export const Route = createLazyFileRoute('/create/$lobbyId')({
   component: Page
@@ -99,7 +100,10 @@ function Page() {
   return (
     <div className="h-screen">
       <div className="text-center items-center pt-20">
+        <span className="inline-flex">
         <H1Component>lobby {lobbyId}</H1Component>
+        <QRCode value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
+        </span>
 
         {state === State.Waiting && lobby &&
           <div className="pt-20 items-center w-1/2 grid grid-flow-col">
