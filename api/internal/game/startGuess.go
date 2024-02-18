@@ -19,7 +19,7 @@ func StartRound(l *models.Lobby) {
 
 func NewRound(l *models.Lobby) {
 	// Broadcast question
-	m, _ := json.Marshal(l.Questions[0])
+	m, _ := json.Marshal(l.Questions[l.Round])
 	l.BroadcastToAllPlayers(m)
 	l.Guesses = map[string]int{}
 	// Start timer for question deadline
