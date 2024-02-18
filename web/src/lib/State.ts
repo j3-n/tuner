@@ -4,4 +4,3 @@ export enum State {
   Result,
   Finished,
 }
-
