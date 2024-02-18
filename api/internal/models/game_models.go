@@ -19,6 +19,21 @@ const (
 	Finish                    // 3
 )
 
+func (g GameState) String() string {
+	switch g {
+	case Waiting:
+		return "WAITING"
+	case Guessing:
+		return "QUESTION"
+	case Results:
+		return "RESULT"
+	case Finish:
+		return "FINISH"
+	}
+
+	return ""
+}
+
 type Packet struct {
 	Command string `json:"command"`
 	Body    []byte `json:"body"`

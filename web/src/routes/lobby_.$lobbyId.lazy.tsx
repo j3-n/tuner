@@ -48,7 +48,7 @@ function Page() {
       }
 
       switch (command.command) {
-        case "LOBBY":
+        case "WAITING":
           // the default state
           setLobby(JSON.parse(command.body));
           break;
