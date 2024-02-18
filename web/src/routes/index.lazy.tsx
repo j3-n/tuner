@@ -10,9 +10,13 @@ function Page() {
   return (
     <div className="p-2 fixed justify-center items-center w-full">
 
-      <img src={logoImg} className="h-48 rounded-3xl inline ml-10"></img>
-
-      <h1 className="text-8xl font-bold inline ml-10">TUNER</h1>
+      <div className="flex items-center">
+        <img src={logoImg} className="h-48 rounded-3xl inline ml-10" alt="Logo"></img>
+        <div className="ml-10 text-center">
+          <h1 className="text-8xl font-bold">TUNER</h1>
+          <p>A free range, 100% LLM free piece of tuna!</p>
+        </div>
+      </div>
 
       <div className="w-full text-slate-100 px-10 mt-10">
         <div className="align-middle gap-x-10 w-full h-96 grid grid-cols-2 mb-20">
