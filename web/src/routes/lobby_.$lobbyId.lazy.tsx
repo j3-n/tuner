@@ -13,7 +13,6 @@ import { Result } from '../types/Result';
 import { ResultComponent } from '../components/result';
 import { LeaderboardComponent } from '../components/leaderboard';
 import { BackgroundComponent } from '../components/background';
-import { SongComponent } from '../components/song';
 import QRCode from 'react-qr-code';
 
 export const Route = createLazyFileRoute('/lobby/$lobbyId')({
