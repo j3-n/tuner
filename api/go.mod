@@ -10,6 +10,9 @@ require (
 
 require (
 	github.com/fasthttp/websocket v1.5.7 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	golang.org/x/net v0.18.0 // indirect
 )
@@ -31,4 +34,6 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
+	gorm.io/driver/sqlite v1.5.5
+	gorm.io/gorm v1.25.7
 )
