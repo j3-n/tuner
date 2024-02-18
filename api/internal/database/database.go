@@ -102,3 +102,17 @@ func (s *Store) Contains(i interface{}, t string) error {
 
 	return nil
 }
+
+// Automatically Migrate all of the given Models
+func (s *Store) AutoMigrate(i ...interface{}) error {
+	if len(i) > 0 {
+		for _, m := range i {
+			err := s.DB.Migrator().AutoMigrate(&m)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
