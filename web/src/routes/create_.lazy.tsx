@@ -65,7 +65,7 @@ function Page() {
             setResult(command.body as Result);
             setState(State.Result);
             break;
-          case "FINISHED":
+          case "FINISH":
             // shows the end of game leaderboard
             setLeaderboard(command.body as Leaderboard);
             setState(State.Finished);
@@ -134,7 +134,7 @@ function Page() {
             <QRCode className="mx-auto mt-10" value={`https://${import.meta.env.VITE_WEB_ADDRESS}/${lobby?.lobbyId}`}></QRCode>
             <div className="mt-16 gap-y-2 p-5 items-center w-1/2 mx-auto grid grid-cols-5 rounded-xl bg-opacity-75 bg-slate-800">
               {lobby && lobby.players.map((player: Player, index: number) =>
-                <PlayerComponent key={index} player={player}></PlayerComponent>
+                <PlayerComponent showScore={false} key={index} player={player}></PlayerComponent>
               )}
             </div>
           </div>

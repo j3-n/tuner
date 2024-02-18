@@ -1,5 +1,9 @@
-import { Player } from "./Player";
-
 export type Leaderboard = {
-  players: Player[];
+  scores: PlayerScore[],
+};
+
+export type PlayerScore = {
+  playerName: string,
+  iconURL: string,
+  score: number
 };
