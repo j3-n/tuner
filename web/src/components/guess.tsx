@@ -41,7 +41,7 @@ export const GuessComponent: React.FC<Props> = ({
           </ButtonComponent>
           <ButtonComponent
             color="blue"
-            onClick={() => onClick("2")}
+            onClick={() => onClick("3")}
           >
             {blueText}
           </ButtonComponent>
