@@ -28,7 +28,7 @@ function Page() {
   const [result, setResult] = useState<Result>();
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
 
-  const { sendMessage, sendJsonMessage } = useWebSocket(socketUrl, {
+  const { sendJsonMessage } = useWebSocket(socketUrl, {
     onOpen: () => {
       console.log("connected")
     },
@@ -72,10 +72,9 @@ function Page() {
 
   const onClickPlay = () => {
     const message = {
-      command: "play",
+      command: "START",
       body: "",
     };
-    sendMessage("quiz");
     sendJsonMessage(message);
   };
 
