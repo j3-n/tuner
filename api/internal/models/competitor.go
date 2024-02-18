@@ -1,6 +1,6 @@
 package models
 
 type Competitor struct {
-	id    string `json:"playerId"`
-	score int    `json:"socre"`
+	Id    string `json:"playerId"`
+	Score int    `json:"socre"`
 }
