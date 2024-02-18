@@ -36,6 +36,10 @@ function Page() {
       console.log("connected")
     },
     onMessage: (event: WebSocketEventMap['message']) => {
+      if (event.data == null || event == null) {
+        return;
+      }
+
       try {
         const message = event.data;
         const command = JSON.parse(message);
