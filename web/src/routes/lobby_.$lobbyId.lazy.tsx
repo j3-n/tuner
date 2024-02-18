@@ -40,33 +40,41 @@ function Page() {
     },
     onMessage: (event: WebSocketEventMap['message']) => {
       const message = event.data;
-      console.log(message);
-      setCommand(JSON.parse(message));
+      console.log(JSON.stringify(message));
+      try {
+        setCommand(JSON.parse(message));
+      } catch (error) {
+        console.log("error parsing json", error)
+      }
 
       if (command == null) {
         return;
       }
 
-      switch (command.command) {
-        case "WAITING":
-          // the default state
-          setLobby(JSON.parse(command.body));
-          break;
-        case "QUESTION":
-          // follows the default state, will alternate with result state till finished state
-          setQuestion(JSON.parse(command.body));
-          setState(State.Answering);
-          break;
-        case "RESULT":
-          // result state, shows the current user points
-          setResult(JSON.parse(command.body));
-          setState(State.Result);
-          break;
-        case "FINISHED":
-          // shows the end of game leaderboard
-          setLeaderboard(JSON.parse(command.body));
-          setState(State.Finished);
-          break;
+      try {
+        switch (command.command) {
+          case "WAITING":
+            // the defa(ult state
+            setLobby(JSON.parse(command.body));
+            break;
+          case "QUESTION":
+            // follows the default state, will alternate with result state till finished state
+            setQuestion(JSON.parse(command.body));
+            setState(State.Answering);
+            break;
+          case "RESULT":
+            // result state, shows the current user points
+            setResult(JSON.parse(command.body));
+            setState(State.Result);
+            break;
+          case "FINISHED":
+            // shows the end of game leaderboard
+            setLeaderboard(JSON.parse(command.body));
+            setState(State.Finished);
+            break;
+        }
+      } catch (error) {
+        console.log("error parsing command,", error)
       }
     },
     onClose: () => {
@@ -82,15 +90,18 @@ function Page() {
     <div className="max-h-screen">
       <div className="text-center items-center pt-20">
         <H1Component>lobby {lobbyId}</H1Component>
+      </div>
 
+      {state === State.Waiting && lobby &&
         <div className="pt-20 items-center w-1/2 grid grid-flow-col">
-          {lobby && lobby.players.map((player: Player, index: number) =>
+          {JSON.stringify(lobby)}
+          {lobby.players.map((player: Player, index: number) =>
             <div key={index}>
               <PlayerComponent player={player}></PlayerComponent>
             </div>
           )}
-        </div>
-      </div>
+        </div>}
+
 
       {state === State.Answering && question &&
         <div>

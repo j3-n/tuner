@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"log"
 	"sync"
 	"time"
 
@@ -36,7 +37,7 @@ func (g GameState) String() string {
 
 type Packet struct {
 	Command string `json:"command"`
-	Body    string `json:"body"`
+	Body    any    `json:"body"`
 }
 
 type Lobby struct {
@@ -77,11 +78,15 @@ type Player struct {
 }
 
 func CreatePacket(command string, v any) []byte {
-	m, _ := json.Marshal(v)
-	ret, _ := json.Marshal(Packet{
+	ret, err := json.Marshal(Packet{
 		Command: command,
-		Body:    string(m),
+		Body:    v,
 	})
+
+	if err != nil {
+		log.Println(err)
+	}
+
 	return ret
 }
 
