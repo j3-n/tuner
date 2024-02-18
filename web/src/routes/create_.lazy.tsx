@@ -15,6 +15,7 @@ import { LeaderboardComponent } from '../components/leaderboard';
 import { SongComponent } from '../components/song';
 import { BackgroundComponent } from '../components/background';
 import QRCode from 'react-qr-code';
+import { LinkComponent } from '../components/link';
 
 export const Route = createLazyFileRoute('/create')({
   component: Page
@@ -105,7 +106,7 @@ function Page() {
         {state != State.Waiting &&
           <div className="mx-auto items-center w-1/4 bg-red-700 rounded-xl mt-5 p-1">
             <center>
-              <ButtonComponent onClick={onClickLeave}>Leave Game</ButtonComponent>
+              <LinkComponent to="/" onClick={onClickLeave}>Leave Game</LinkComponent>
             </center>
           </div>
         }
