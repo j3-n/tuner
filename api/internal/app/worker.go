@@ -24,7 +24,6 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
 	for {
 		var data ClientData
 		err := c.ReadJSON(&data)
-		fmt.Println(data)
 		if err != nil {
 			// Player disconnect
 			fmt.Printf("%s has disconnected from lobby %s\n", p.DisplayName, l.LobbyId)
