@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"sync"
 	"time"
 
@@ -17,6 +18,11 @@ const (
 	Results                   // 2
 	Finish                    // 3
 )
+
+type Packet struct {
+	Command string `json:"command"`
+	Body    []byte `json:"body"`
+}
 
 type Lobby struct {
 	mu         sync.Mutex     `json:"-"`
@@ -53,6 +59,15 @@ type Player struct {
 	IconURL     string          `json:"iconURL"`
 	Carousel    []string        `json:"carousel"`
 	Conn        *websocket.Conn `json:"-"`
+}
+
+func CreatePacket(command string, v any) []byte {
+	m, _ := json.Marshal(v)
+	ret, _ := json.Marshal(Packet{
+		Command: command,
+		Body:    m,
+	})
+	return ret
 }
 
 func (l *Lobby) AddPlayer(p *Player) {
