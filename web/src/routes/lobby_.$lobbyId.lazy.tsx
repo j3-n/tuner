@@ -120,7 +120,7 @@ function Page() {
           </div>
         }
 
-        {state === State.Answering && question &&
+        {state === State.Answering && question && question.answers &&
           <div>
             <AnswerComponent
               orangeText={question.answers[0].song + " - " + question.answers[0].artist}
