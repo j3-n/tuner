@@ -40,8 +40,6 @@ function Page() {
         const message = event.data;
         const command = JSON.parse(message);
 
-        console.log(JSON.stringify(command));
-
         switch (command?.command) {
           case "WAITING":
             // the default state
