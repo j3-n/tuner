@@ -112,11 +112,14 @@ function Page() {
         {state === State.Waiting &&
           <div className="mx-auto items-center w-1/4 mt-10">
             <center>
-              <ButtonComponent onClick={onClickPlay}><div className="bg-green-600 rounded-xl text-3xl p-5">Play</div></ButtonComponent>
+              <ButtonComponent onClick={onClickPlay}>
+                <div className="bg-green-600 rounded-xl text-3xl p-5">
+                  Play
+                </div>
+              </ButtonComponent>
             </center>
           </div>
         }
-
 
         {state === State.Waiting && lobby &&
           <div>
@@ -128,7 +131,6 @@ function Page() {
             </div>
           </div>
         }
-
 
         {state === State.Answering && question &&
           <div>
