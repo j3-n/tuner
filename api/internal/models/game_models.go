@@ -23,6 +23,7 @@ type Lobby struct {
 	Host       string         `json:"-"`
 	LobbyId    string         `json:"lobbyId"`
 	PlayerList []*Player      `json:"players"`
+	Points     map[string]int `json:"points"`
 	State      GameState      `json:"-"`
 	Guesses    map[string]int `json:"-"` // Index
 	Questions  []Question     `json:"-"`
